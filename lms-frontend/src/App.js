@@ -41,7 +41,7 @@ function App() {
             
 
             <Routes>
-            <Route path="/login status={isLoggedIn}" element={<Login status={isLoggedIn} />} />
+            <Route path="/login" element={<Login status={isLoggedIn} />} />
             <Route  exact path="/register" element={isLoggedIn === "true" ? <Register /> : <Login status={isLoggedIn} /> }/>
         <Route  exact path="/" element={isLoggedIn === "true" ? <Home /> : <Login status={isLoggedIn} />} />
         <Route  exact path="/createuser" element={isLoggedIn === "true" ? < CreateUser/> : <Login status={isLoggedIn} />} />
