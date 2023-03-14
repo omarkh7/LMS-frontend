@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import Topbar from "./components/Home/Topbar";
 import Sidebar from "./components/Home/Sidebar";
@@ -17,10 +17,17 @@ import Sections from "./components/Sections/Sections";
 import ClassSection from "./components/Class-Section/ClassSection";
 import Login from "./components/Auth/Login";
 import CreateUser from "./components/Users/CreateUser";
-
+import Register from "./components/Auth/Register";
 function App() {
   const [theme, colorMode] = useMode();
   const [isSidebar, setIsSidebar] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(
+    window.localStorage.getItem("loggedIn")
+  );
+
+  useEffect(() => {
+    setIsLoggedIn(window.localStorage.getItem("loggedIn"));
+  }, []);
 
   return (
     <ColorModeContext.Provider value={colorMode}>
@@ -33,18 +40,18 @@ function App() {
 
             <Routes>
             <Route path="/login" element={<Login />} />
-
-              <Route path="/" element={<Home />} />
-              <Route path="/createuser" element={<CreateUser />} />
-              <Route path="/admin" element={<Admin />} />
-              <Route path="/teacher" element={<Teacher />} />
-              <Route path="/students" element={<Students />} />
-              <Route path="/classes" element= {<Classes/>} />
-              <Route path="/sections" element={<Sections />} />
-              <Route path="/class-section" element={<ClassSection />} />
-              <Route path="/bar" element={<Bar />} />
-              <Route path="/pie" element={<Pie />} />
-              <Route path="/calendar" element={<Calendar />} />
+            <Route  exact path="/register" element={isLoggedIn === "true" ? <Register /> : <Login /> }/>
+        <Route  exact path="/" element={isLoggedIn === "true" ? <Home /> : <Login />} />
+        <Route  exact path="/createuser" element={isLoggedIn === "true" ? < CreateUser/> : <Login />} />
+        <Route  exact path="/admin" element={isLoggedIn === "true" ? <Admin /> : <Login />} />
+        <Route  exact path="/teacher" element={isLoggedIn === "true" ? <Teacher /> : <Login />} />
+        <Route  exact path="/students" element={isLoggedIn === "true" ? < Students /> : <Login />} />
+        <Route  exact path="/classes" element={isLoggedIn === "true" ? <Classes /> : <Login />} />
+        <Route  exact path="/sections" element={isLoggedIn === "true" ? < Sections /> : <Login />} />
+        <Route  exact path="/class-section" element={isLoggedIn === "true" ? <ClassSection /> : <Login />} />
+        <Route  exact path="/bar" element={isLoggedIn === "true" ? <Bar /> : <Login />} />
+        <Route  exact path="/pie" element={isLoggedIn === "true" ? <Pie /> : <Login />} />
+        <Route  exact path="/calendar" element={isLoggedIn === "true" ? <Calendar /> : <Login />} />
             </Routes>
           </main>
         </div>
