@@ -13,7 +13,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Component, useState } from "react";
-
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer, toast } from "react-toastify";
 const theme = createTheme();
 
 export default function Login(props) {
@@ -40,7 +41,8 @@ export default function Login(props) {
       .then((data) => {
         console.log(data, "userRegister");
         if ((data.status = 201)) {
-          
+          toast.success("Loggged in", 2000);
+
           window.localStorage.setItem("token", data.token);
           window.localStorage.setItem("loggedIn", true);
           window.location.href = "/";
@@ -135,6 +137,8 @@ export default function Login(props) {
         </Box>
       </Grid>
     </Grid>
+    <ToastContainer />
+
   </ThemeProvider>
   );
           }
