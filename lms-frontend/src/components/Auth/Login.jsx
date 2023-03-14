@@ -40,10 +40,10 @@ export default function Login(props) {
       .then((data) => {
         console.log(data, "userRegister");
         if ((data.status = 201)) {
-          alert("login successful");
+          
           window.localStorage.setItem("token", data.token);
           window.localStorage.setItem("loggedIn", true);
-          window.location.href = "/login";
+          window.location.href = "/";
      
         }
       });
