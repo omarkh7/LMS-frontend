@@ -155,7 +155,6 @@ const Register = () => {
               >
                 <MenuItem value={1}>Admin</MenuItem>
                 <MenuItem value={2}>Teacher</MenuItem>
-                <MenuItem value={3}>Student</MenuItem>
               </Select>
             </FormControl>
           </div>
