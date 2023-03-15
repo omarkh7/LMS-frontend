@@ -1,154 +1,217 @@
-import { Box, Button, TextField } from "@mui/material";
-import { Formik } from "formik";
-import * as yup from "yup";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import Header from "../Header";
+import React, { useState , useEffect} from "react";
+import {
+  Box,
+  Button,
+  TextField,
+  InputLabel,
+  FormControl,
+  Select,
+  MenuItem,
+
+} from "@mui/material";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
+
+import axios from "axios";
 
 const CreateUser = () => {
-	const isNonMobile = useMediaQuery("(min-width:600px)");
+  const [formData, setFormData] = useState({
+    username: "",
+    password: "",
+    email: "",
+    firstname: "",
+    lastname: "",
+    role: "",
+    image: null,
+    phonenb: null,
+  });
 
-	const handleFormSubmit = (values) => {
-		console.log(values);
-	};
+  const userRoles = [
+    { value: 1, label: "Admin" },
+    { value: 2, label: "Teacher" },
+    { value: 3, label: "Student" },
+  ];
 
-	return (
-		<Box m="20px">
-			<Header title="CREATE USER" subtitle="Create a New User Profile" />
+  const [errors, setErrors] = useState({});
 
-			<Formik
-				onSubmit={handleFormSubmit}
-				initialValues={initialValues}
-				validationSchema={checkoutSchema}
-			>
-				{({
-					values,
-					errors,
-					touched,
-					handleBlur,
-					handleChange,
-					handleSubmit,
-				}) => (
-					<form onSubmit={handleSubmit}>
-						<Box
-							display="grid"
-							gap="30px"
-							gridTemplateColumns="repeat(4, minmax(0, 1fr))"
-							sx={{
-								"& > div": { gridColumn: isNonMobile ? undefined : "span 4" },
-							}}
-						>
-							<TextField
-								fullWidth
-								variant="filled"
-								type="text"
-								label="First Name"
-								onBlur={handleBlur}
-								onChange={handleChange}
-								value={values.firstName}
-								name="firstName"
-								error={!!touched.firstName && !!errors.firstName}
-								helperText={touched.firstName && errors.firstName}
-								sx={{ gridColumn: "span 2" }}
-							/>
-							<TextField
-								fullWidth
-								variant="filled"
-								type="text"
-								label="Last Name"
-								onBlur={handleBlur}
-								onChange={handleChange}
-								value={values.lastName}
-								name="lastName"
-								error={!!touched.lastName && !!errors.lastName}
-								helperText={touched.lastName && errors.lastName}
-								sx={{ gridColumn: "span 2" }}
-							/>
-							<TextField
-								fullWidth
-								variant="filled"
-								type="text"
-								label="Email"
-								onBlur={handleBlur}
-								onChange={handleChange}
-								value={values.email}
-								name="email"
-								error={!!touched.email && !!errors.email}
-								helperText={touched.email && errors.email}
-								sx={{ gridColumn: "span 4" }}
-							/>
-							<TextField
-								fullWidth
-								variant="filled"
-								type="text"
-								label="Contact Number"
-								onBlur={handleBlur}
-								onChange={handleChange}
-								value={values.contact}
-								name="contact"
-								error={!!touched.contact && !!errors.contact}
-								helperText={touched.contact && errors.contact}
-								sx={{ gridColumn: "span 4" }}
-							/>
-							<TextField
-								fullWidth
-								variant="filled"
-								type="text"
-								label="Address 1"
-								onBlur={handleBlur}
-								onChange={handleChange}
-								value={values.address1}
-								name="address1"
-								error={!!touched.address1 && !!errors.address1}
-								helperText={touched.address1 && errors.address1}
-								sx={{ gridColumn: "span 4" }}
-							/>
-							<TextField
-								fullWidth
-								variant="filled"
-								type="text"
-								label="Address 2"
-								onBlur={handleBlur}
-								onChange={handleChange}
-								value={values.address2}
-								name="address2"
-								error={!!touched.address2 && !!errors.address2}
-								helperText={touched.address2 && errors.address2}
-								sx={{ gridColumn: "span 4" }}
-							/>
-						</Box>
-						<Box display="flex" justifyContent="end" mt="20px">
-							<Button type="submit" color="secondary" variant="contained">
-								Create New User
-							</Button>
-						</Box>
-					</form>
-				)}
-			</Formik>
-		</Box>
-	);
-};
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value });
+    setErrors({ ...errors, [name]: value ? "" : "This field is required" });
+  };
 
-const phoneRegExp =
-	/^((\+[1-9]{1,4}[ -]?)|(\([0-9]{2,3}\)[ -]?)|([0-9]{2,4})[ -]?)*?[0-9]{3,4}[ -]?[0-9]{3,4}$/;
+  const handleImageChange = (event) => {
+    setFormData({ ...formData, image: event.target.files[0] });
+  };
 
-const checkoutSchema = yup.object().shape({
-	firstName: yup.string().required("required"),
-	lastName: yup.string().required("required"),
-	email: yup.string().email("invalid email").required("required"),
-	contact: yup
-		.string()
-		.matches(phoneRegExp, "Phone number is not valid")
-		.required("required"),
-	address1: yup.string().required("required"),
-	address2: yup.string().required("required"),
-});
-const initialValues = {
-	firstName: "",
-	lastName: "",
-	email: "",
-	contact: "",
-	address1: "",
-	address2: "",
+  const createuser = (event) => {
+    event.preventDefault();
+    const data = new FormData();
+    data.append("username", formData.username);
+    data.append("password", formData.password);
+    data.append("email", formData.email);
+    data.append("firstname", formData.firstname);
+    data.append("lastname", formData.lastname);
+    data.append("role", formData.role);
+    if (formData.image) {
+      data.append("image", formData.image);
+    }
+    if (formData.phonenb) {
+      data.append("phonenb", formData.phonenb);
+    }
+
+    const token = localStorage.getItem("token");
+    axios
+      .post("http://localhost:8000/api/users", data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+        validateStatus: function (status) {
+          return status < 500; // Reject only if the status code is greater than or equal to 500
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+        toast.success("User created successfully!");
+        setFormData({
+          username: "",
+          password: "",
+          email: "",
+          firstname: "",
+          lastname: "",
+          role: "",
+          image: null,
+          phonenb: null,
+        });
+        
+      })
+      .catch((error) => {
+        console.error(error);
+        toast.error("Failed to create user.");
+      });
+   
+  };
+  
+
+  useEffect(() => {
+    
+  }, []);
+
+  return (
+    <Box m="20px">
+      <form encType="multipart/form-data" onSubmit={createuser}>
+        <Box display="flex" flexDirection="column" gap="20px">
+          <div style={{ marginBottom: 10 }}>
+            <TextField
+              fullWidth
+              name="username"
+              label="Username"
+              value={formData.username}
+              onChange={handleInputChange}
+              required
+              error={Boolean(errors.username)}
+              helpertext={errors.username}
+            />
+          </div>
+          <div style={{ marginBottom: 10 }}>
+            <TextField
+              error={Boolean(errors.username)}
+              helpertext={errors.username}
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              value={formData.password}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+          <div style={{ marginBottom: 10 }}>
+            <TextField
+              error={Boolean(errors.username)}
+              helpertext={errors.username}
+              fullWidth
+              name="email"
+              label="Email"
+              type="email"
+              value={formData.email}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+          <div style={{ marginBottom: 10 }}>
+            <TextField
+              error={Boolean(errors.username)}
+              helpertext={errors.username}
+              fullWidth
+              name="firstname"
+              label="First name"
+              value={formData.firstname}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+          <div style={{ marginBottom: 10 }}>
+            <TextField
+              error={Boolean(errors.username)}
+              helpertext={errors.username}
+              fullWidth
+              name="lastname"
+              label="Last name"
+              value={formData.lastname}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+          <div style={{ marginBottom: 10 }}>
+            <FormControl fullWidth>
+              <InputLabel id="role-label">Role</InputLabel>
+              <Select
+                error={Boolean(errors.username)}
+                helpertext={errors.username}
+                labelId="role-label"
+                name="role"
+                value={formData.role}
+                onChange={handleInputChange}
+                required
+              >
+                <MenuItem value={1}>Admin</MenuItem>
+                <MenuItem value={2}>Teacher</MenuItem>
+                <MenuItem value={3}>Student</MenuItem>
+              </Select>
+            </FormControl>
+          </div>
+          <div style={{ marginBottom: 10 }}>
+            <TextField
+              error={Boolean(errors.username)}
+              helpertext={errors.username}
+              fullWidth
+              name="phonenb"
+              label="Phone Number"
+              type="tel"
+              value={formData.phonenb}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div style={{ marginBottom: 10 }}>
+            <TextField
+              error={Boolean(errors.username)}
+              helpertext={errors.username}
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+            />
+          </div>
+          <Button fullWidth variant="contained" color="primary" type="submit">
+            Submit
+          </Button>
+        </Box>
+      </form>
+      <ToastContainer />
+    </Box>
+  );
 };
 
 export default CreateUser;
