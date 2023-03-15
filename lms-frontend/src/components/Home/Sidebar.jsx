@@ -16,6 +16,7 @@ import AbcOutlinedIcon from '@mui/icons-material/AbcOutlined';
 import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
 import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
@@ -114,7 +115,14 @@ const Sidebar = () => {
               icon={<AddOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
-            />
+            />            
+            <Item
+            title="Register"
+            to="/register"
+            icon={<PersonOutlinedIcon />}
+            selected={selected}
+            setSelected={setSelected}
+          />
             <Item
               title="Admins"
               to="/admin"

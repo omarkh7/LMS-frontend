@@ -51,11 +51,12 @@ function App() {
                 exact
                 path="/login"
                 element={isLoggedIn === "true" ? <Home /> : <Login />}
-              />              {/* <Route
+              /> 
+              <Route
                 exact
                 path="/register"
                 element={isLoggedIn === "true" ? <Register /> : <Login />}
-              /> */}
+              />
               <Route
                 exact
                 path="/"
