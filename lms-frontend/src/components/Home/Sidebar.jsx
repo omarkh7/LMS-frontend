@@ -108,42 +108,6 @@ const Sidebar = () => {
 							Users
 						</Typography>
 						<Item
-							title="Create a User"
-							to="/createuser"
-							icon={<AddOutlinedIcon />}
-							selected={selected}
-							setSelected={setSelected}
-						/>
-						<Item
-							title="Admins"
-							to="/admin"
-							icon={<PeopleOutlinedIcon />}
-							selected={selected}
-							setSelected={setSelected}
-						/>
-						<Item
-							title="Teachers"
-							to="/teacher"
-							icon={<ContactsOutlinedIcon />}
-							selected={selected}
-							setSelected={setSelected}
-						/>
-						<Item
-							title="Students"
-							to="/students"
-							icon={<GroupsOutlinedIcon />}
-							selected={selected}
-							setSelected={setSelected}
-						/>
-
-            <Typography
-              variant="h6"
-              color={colors.grey[300]}
-              sx={{ m: "15px 0 5px 20px" }}
-            >
-              Users
-            </Typography>
-            <Item
               title="Create a User"
               to="/createuser"
               icon={<AddOutlinedIcon />}
@@ -179,6 +143,43 @@ const Sidebar = () => {
               setSelected={setSelected}
             />
 
+
+						<Typography
+							variant="h6"
+							color={colors.grey[300]}
+							sx={{ m: "15px 0 5px 20px" }}
+						>
+							Rooms
+						</Typography>
+						<Item
+							title="Classes"
+							to="/classes"
+							icon={<ClassOutlinedIcon />}
+							selected={selected}
+							setSelected={setSelected}
+						/>
+						<Item
+							title="Sections"
+							to="/sections"
+							icon={<AbcOutlinedIcon />}
+							selected={selected}
+							setSelected={setSelected}
+						/>
+						<Item
+							title="Class Section"
+							to="/class-section"
+							icon={<SchoolOutlinedIcon />}
+							selected={selected}
+							setSelected={setSelected}
+						/>
+            <Typography
+              variant="h6"
+              color={colors.grey[300]}
+              sx={{ m: "15px 0 5px 20px" }}
+            >
+              Users
+            </Typography>
+  
 						<Typography
 							variant="h6"
 							color={colors.grey[300]}

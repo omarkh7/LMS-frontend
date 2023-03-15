@@ -41,19 +41,19 @@ function App() {
 					<main className="content">
 						{isLoggedIn === "true" && <Topbar setIsSidebar={setIsSidebar} />}
 
-<<<<<<< HEAD
 						<Routes>
 							<Route exact path="/*" element={<PagenotFound />} />
+
 							<Route
 								exact
 								path="/login"
 								element={isLoggedIn === "true" ? <Home /> : <Login />}
-							/>{" "}
-							{/* <Route
-                exact
-                path="/register"
-                element={isLoggedIn === "true" ? <Register /> : <Login />}
-              /> */}
+							/>
+							<Route
+								exact
+								path="/register"
+								element={isLoggedIn === "true" ? <Register /> : <Login />}
+							/>
 							<Route
 								exact
 								path="/"
@@ -115,83 +115,6 @@ function App() {
 			</ThemeProvider>
 		</ColorModeContext.Provider>
 	);
-=======
-            <Routes>
-
-        <Route exact path="/*" element={<PagenotFound/>} />
-
-        <Route
-                exact
-                path="/login"
-                element={isLoggedIn === "true" ? <Home /> : <Login />}
-              /> 
-              <Route
-                exact
-                path="/register"
-                element={isLoggedIn === "true" ? <Register /> : <Login />}
-              />
-              <Route
-                exact
-                path="/"
-                element={isLoggedIn === "true" ? <Home /> : <Login />}
-              />
-              <Route
-                exact
-                path="/createuser"
-                element={isLoggedIn === "true" ? <CreateUser /> : <Login />}
-              />
-              <Route
-                exact
-                path="/admin"
-                element={isLoggedIn === "true" ? <Admin /> : <Login />}
-              />
-              <Route
-                exact
-                path="/teacher"
-                element={isLoggedIn === "true" ? <Teacher /> : <Login />}
-              />
-              <Route
-                exact
-                path="/students"
-                element={isLoggedIn === "true" ? <Students /> : <Login />}
-              />
-              <Route
-                exact
-                path="/classes"
-                element={isLoggedIn === "true" ? <Classes /> : <Login />}
-              />
-              <Route
-                exact
-                path="/sections"
-                element={isLoggedIn === "true" ? <Sections /> : <Login />}
-              />
-              <Route
-                exact
-                path="/class-section"
-                element={isLoggedIn === "true" ? <ClassSection /> : <Login />}
-              />
-              <Route
-                exact
-                path="/bar"
-                element={isLoggedIn === "true" ? <Bar /> : <Login />}
-              />
-              <Route
-                exact
-                path="/pie"
-                element={isLoggedIn === "true" ? <Pie /> : <Login />}
-              />
-              <Route
-                exact
-                path="/calendar"
-                element={isLoggedIn === "true" ? <Calendar /> : <Login />}
-              />
-            </Routes>
-          </main>
-        </div>
-      </ThemeProvider>
-    </ColorModeContext.Provider>
-  );
->>>>>>> c63933218e64c36ce32dc656569509e759771a9f
 }
 
 export default App;
