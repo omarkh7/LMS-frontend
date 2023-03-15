@@ -1,110 +1,197 @@
-import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import React, { useState , useEffect} from "react";
+import {
+  Box,
+  Button,
+  TextField,
+  InputLabel,
+  FormControl,
+  Select,
+  MenuItem,
 
-const theme = createTheme();
+} from "@mui/material";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 
-export default function Register() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+import axios from "axios";
+
+const Register = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    password_confirmation: "",
+    role: "",
+    firstname: "",
+    lastname: "",  });
+
+  const userRoles = [
+    { value: 1, label: "Admin" },
+    { value: 2, label: "Teacher" },
+    { value: 3, label: "Student" },
+  ];
+
+  const [errors, setErrors] = useState({});
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value });
+    setErrors({ ...errors, [name]: value ? "" : "This field is required" });
   };
 
+  const register = (event) => {
+    event.preventDefault();
+    const data = new FormData();
+    data.append("name", formData.name);
+    data.append("email", formData.email);
+    data.append("password", formData.password);
+    data.append("password_confirmation", formData.password_confirmation);
+    data.append("role", formData.role);
+    data.append("firstname", formData.firstname);
+    data.append("lastname", formData.lastname);
+    const token = localStorage.getItem("token");
+    axios
+      .post("http://localhost:8000/api/register", data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+        validateStatus: function (status) {
+          return status < 500; // Reject only if the status code is greater than or equal to 500
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+        toast.success("Admin created successfully!");
+        setFormData({
+          name: "",
+          email: "",
+          password: "",
+          password_confirmation: "",
+          role: "",
+          firstname: "",
+          lastname: "",
+        });
+        
+      })
+      .catch((error) => {
+        console.error(error);
+        toast.error("Failed to create user.");
+      });
+   
+  };
+  
+
+  useEffect(() => {
+    
+  }, []);
+
   return (
-    <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-Register          </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  autoComplete="given-name"
-                  name="firstName"
-                  required
-                  fullWidth
-                  id="firstName"
-                  label="First Name"
-                  autoFocus
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
-                  autoComplete="family-name"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="new-password"
-                />
-              </Grid>
-            </Grid>
-            <Button
-              type="submit"
+    <Box m="20px">
+      <form encType="multipart/form-data" onSubmit={register}>
+        <Box display="flex" flexDirection="column" gap="20px">
+          <div style={{ marginBottom: 10 }}>
+            <TextField
               fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Register User
-            </Button>
-            <Grid container justifyContent="flex-end">
-              <Grid item>
-                <Link href="#" variant="body2">
-                  Already have an account? Sign in
-                </Link>
-              </Grid>
-            </Grid>
-          </Box>
+              name="name"
+              label="name"
+              value={formData.name}
+              onChange={handleInputChange}
+              required
+              error={Boolean(errors.name)}
+              helpertext={errors.name}
+            />
+          </div>
+          <div style={{ marginBottom: 10 }}>
+            <TextField
+              error={Boolean(errors.username)}
+              helpertext={errors.username}
+              fullWidth
+              name="email"
+              label="Email"
+              type="email"
+              value={formData.email}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+          <div style={{ marginBottom: 10 }}>
+            <TextField
+              error={Boolean(errors.name)}
+              helpertext={errors.name}
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              value={formData.password}
+              onChange={handleInputChange}
+              required
+            />
+          </div>          
+          <div style={{ marginBottom: 10 }}>
+            <TextField
+              error={Boolean(errors.name)}
+              helpertext={errors.name}
+              fullWidth
+              name="password_confirmation"
+              label="PasswordConfirmation"
+              type="password"
+              value={formData.password_confirmation}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+          <div style={{ marginBottom: 10 }}>
+            <FormControl fullWidth>
+              <InputLabel id="role-label">Role</InputLabel>
+              <Select
+                error={Boolean(errors.username)}
+                helpertext={errors.username}
+                labelId="role-label"
+                name="role"
+                value={formData.role}
+                onChange={handleInputChange}
+                required
+              >
+                <MenuItem value={1}>Admin</MenuItem>
+                <MenuItem value={2}>Teacher</MenuItem>
+                <MenuItem value={3}>Student</MenuItem>
+              </Select>
+            </FormControl>
+          </div>
+          <div style={{ marginBottom: 10 }}>
+            <TextField
+              error={Boolean(errors.username)}
+              helpertext={errors.username}
+              fullWidth
+              name="firstname"
+              label="First name"
+              value={formData.firstname}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+          <div style={{ marginBottom: 10 }}>
+            <TextField
+              error={Boolean(errors.username)}
+              helpertext={errors.username}
+              fullWidth
+              name="lastname"
+              label="Last name"
+              value={formData.lastname}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+         
+          <Button fullWidth variant="contained" color="primary" type="submit">
+            Submit
+          </Button>
         </Box>
-      </Container>
-    </ThemeProvider>
+      </form>
+      <ToastContainer />
+    </Box>
   );
-}
+};
+
+export default Register;
