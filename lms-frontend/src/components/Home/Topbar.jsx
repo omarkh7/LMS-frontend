@@ -14,6 +14,8 @@ const Topbar = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const colorMode = useContext(ColorModeContext);
+
+  
   const logOut = () => {
     window.localStorage.clear();
     window.location.reload(true);
@@ -42,7 +44,7 @@ const Topbar = () => {
             <LightModeOutlinedIcon />
           )}
         </IconButton>
-        <Link to="/">
+        <Link to="/login">
         <IconButton onClick={logOut} >
           <PersonOutlinedIcon/>
         </IconButton>
