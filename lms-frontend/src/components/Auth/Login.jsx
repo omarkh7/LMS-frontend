@@ -1,27 +1,32 @@
-import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Paper from '@mui/material/Paper';
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Component, useState } from "react";
+import * as React from "react";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import CssBaseline from "@mui/material/CssBaseline";
+import TextField from "@mui/material/TextField";
+
+import Paper from "@mui/material/Paper";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Typography from "@mui/material/Typography";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { Component, useState, useEffect } from "react";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer, toast } from "react-toastify";
+// import { useHistory } from "react-router-dom";
 
 const theme = createTheme();
 
-export default function SignInSide() {
+export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   function handleSubmit(e) {
     e.preventDefault();
+    if (!email || !password) {
+      toast.error("Please enter your email and password", { autoClose: 2000 });
+      return;
+    }
     console.log(email, password);
     fetch("http://localhost:8000/api/login", {
       method: "POST",
@@ -38,21 +43,27 @@ export default function SignInSide() {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data, "userRegister");
-        if ((data.status = 201)) {
-          alert("login successful");
+        console.log(data, "Logged in");
+        if (data.token) {
+          toast.success("Logged in", { autoClose: 2000 });
           window.localStorage.setItem("token", data.token);
           window.localStorage.setItem("loggedIn", true);
-          window.location.href = "/login";
-     
+          window.location.href = "/";
+        } else {
+          toast.error("Invalid email or password", { autoClose: 2000 });
         }
+      })
+      .catch((error) => {
+        toast.error("An error occurred. Please try again later.", {
+          autoClose: 2000,
+        });
+        console.error("Error:", error);
       });
   }
 
-  
   return (
     <ThemeProvider theme={theme}>
-      <Grid container component="main" sx={{ height: '100vh' }}>
+      <Grid container component="main" sx={{ height: "100vh" }}>
         <CssBaseline />
         <Grid
           item
@@ -60,12 +71,14 @@ export default function SignInSide() {
           sm={4}
           md={7}
           sx={{
-            backgroundImage: 'url(https://source.unsplash.com/random)',
-            backgroundRepeat: 'no-repeat',
+            backgroundImage: "url(https://source.unsplash.com/random)",
+            backgroundRepeat: "no-repeat",
             backgroundColor: (t) =>
-              t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
+              t.palette.mode === "light"
+                ? t.palette.grey[50]
+                : t.palette.grey[900],
+            backgroundSize: "cover",
+            backgroundPosition: "center",
           }}
         />
         <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
@@ -73,18 +86,23 @@ export default function SignInSide() {
             sx={{
               my: 8,
               mx: 4,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
-            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
+            <Box
+              component="form"
+              noValidate
+              onSubmit={handleSubmit}
+              sx={{ mt: 1 }}
+            >
               <TextField
                 margin="normal"
                 required
@@ -95,7 +113,6 @@ export default function SignInSide() {
                 autoComplete="email"
                 autoFocus
                 onChange={(e) => setEmail(e.target.value)}
-
               />
               <TextField
                 margin="normal"
@@ -108,10 +125,7 @@ export default function SignInSide() {
                 autoComplete="current-password"
                 onChange={(e) => setPassword(e.target.value)}
               />
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-              />
+
               <Button
                 type="submit"
                 fullWidth
@@ -120,22 +134,11 @@ export default function SignInSide() {
               >
                 Sign In
               </Button>
-              <Grid container>
-                <Grid item xs>
-                  <Link href="#" variant="body2">
-                    Forgot password?
-                  </Link>
-                </Grid>
-                <Grid item>
-                  <Link href="/register" variant="body2">
-                    Don't have an account? Sign Up
-                  </Link>
-                </Grid>
-              </Grid>
             </Box>
           </Box>
         </Grid>
       </Grid>
+      <ToastContainer />
     </ThemeProvider>
   );
-          }
+}

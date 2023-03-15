@@ -8,12 +8,19 @@ import { Link } from "react-router-dom";
 
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import SearchIcon from "@mui/icons-material/Search";
+import { WindowScrollController } from "@fullcalendar/react";
 
 const Topbar = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const colorMode = useContext(ColorModeContext);
 
+  
+  const logOut = () => {
+    window.localStorage.clear();
+    window.location.reload(true);
+
+  };
   return (
     <Box display="flex" justifyContent="space-between" p={2}>
       {/* SEARCH BAR */}
@@ -38,7 +45,7 @@ const Topbar = () => {
           )}
         </IconButton>
         <Link to="/login">
-        <IconButton >
+        <IconButton onClick={logOut} >
           <PersonOutlinedIcon/>
         </IconButton>
         </Link>

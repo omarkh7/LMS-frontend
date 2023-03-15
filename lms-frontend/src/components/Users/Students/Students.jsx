@@ -12,7 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 import RemoveOutlinedIcon from "@mui/icons-material/RemoveOutlined";
 import { IconButton } from "@mui/material";
 // import SearchIcon from "@mui/icons-material/Search";
-
+import { CircularProgress } from "@mui/material";
 import {
   Delete as DeleteIcon,
   Edit as EditIcon,
@@ -26,6 +26,8 @@ const Students = () => {
   const [isUpdateMode, setIsUpdateMode] = useState(false);
   const [alldata, setAllData] = useState([]);
   const [imageFile, setImageFile] = useState(null);
+const [loading, setLoading] = useState(true);
+
   const [newData, setNewData] = useState({
     username: "",
     email: "",
@@ -36,7 +38,6 @@ const Students = () => {
     phonenb: "",
   });
   const [isOpen, setIsOpen] = useState(false);
-
   const handleOpen = () => {
     setIsOpen(true);
   };
@@ -44,6 +45,7 @@ const Students = () => {
   const apiURL = "http://localhost:8000/api/users";
 
   const fetchallData = async () => {
+    setLoading(true);
     try {
       const token = localStorage.getItem("token");
       const response = await axios.get(apiURL, {
@@ -56,6 +58,7 @@ const Students = () => {
     } catch (error) {
       console.error(error);
     }
+    setLoading(false);
   };
 
   const deleteUser = async (id) => {

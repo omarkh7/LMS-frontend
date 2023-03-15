@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState , useEffect} from "react";
 import {
   Box,
   Button,
@@ -75,17 +75,34 @@ const CreateUser = () => {
       .then((response) => {
         console.log(response.data);
         toast.success("User created successfully!");
+        setFormData({
+          username: "",
+          password: "",
+          email: "",
+          firstname: "",
+          lastname: "",
+          role: "",
+          image: null,
+          phonenb: null,
+        });
+        
       })
       .catch((error) => {
         console.error(error);
         toast.error("Failed to create user.");
       });
+   
   };
+  
+
+  useEffect(() => {
+    
+  }, []);
 
   return (
     <Box m="20px">
       <form encType="multipart/form-data" onSubmit={createuser}>
-        <Box display="flex" flexDirection="column" gap="10px">
+        <Box display="flex" flexDirection="column" gap="20px">
           <div style={{ marginBottom: 10 }}>
             <TextField
               fullWidth
