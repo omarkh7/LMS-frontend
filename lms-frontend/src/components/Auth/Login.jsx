@@ -48,6 +48,8 @@ export default function Login() {
           toast.success("Logged in", { autoClose: 2000 });
           window.localStorage.setItem("token", data.token);
           window.localStorage.setItem("loggedIn", true);
+          window.localStorage.setItem("role", data.role);
+
           window.location.href = "/";
         } else {
           toast.error("Invalid email or password", { autoClose: 2000 });

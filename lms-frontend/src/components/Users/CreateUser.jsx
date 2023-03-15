@@ -33,6 +33,12 @@ const CreateUser = () => {
     { value: 3, label: "Student" },
   ];
 
+  const isAdmin = localStorage.getItem("role") === "1";
+  const role = isAdmin ? "admin" : "teacher";
+  console.log("isAdmin ",isAdmin);
+
+
+
   const [errors, setErrors] = useState({});
 
   const handleInputChange = (event) => {
@@ -177,8 +183,13 @@ const CreateUser = () => {
                 onChange={handleInputChange}
                 required
               >
+                  {role === "admin" && (
+                    <>
                 <MenuItem value={1}>Admin</MenuItem>
+            
                 <MenuItem value={2}>Teacher</MenuItem>
+                </>
+                )}
                 <MenuItem value={3}>Student</MenuItem>
               </Select>
             </FormControl>
