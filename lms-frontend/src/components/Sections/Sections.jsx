@@ -6,7 +6,6 @@ import Header from "../Header";
 
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-import React, { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
 import "react-toastify/dist/ReactToastify.css";
@@ -23,7 +22,6 @@ import AddIcon from "@mui/icons-material/Add";
 import { useTheme } from "@mui/material";
 
 const Sections = () => {
-	const [alldata, setAllData] = useState([]);
   const [selectedInfo, setSelectedInfo] = useState({});
   const [isUpdateMode, setIsUpdateMode] = useState(false);
   const [alldata, setAllData] = useState([]);
@@ -34,18 +32,8 @@ const Sections = () => {
     setIsOpen(true);
   };
 
-	const apiURL = "http://localhost:8000/api/sections/";
   const apiURL = "http://localhost:8000/api/sections";
 
-	const fetchallData = async () => {
-		try {
-			const response = await axios.get(apiURL);
-			console.log(response.data);
-			setAllData(response.data);
-		} catch (error) {
-			console.error(error);
-		}
-	};
   const fetchallData = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -117,33 +105,13 @@ const Sections = () => {
     }
   };
 
-	useEffect(() => {
-		fetchallData();
-	}, []);
   useEffect(() => {
     fetchallData();
   }, []);
 
-	const theme = useTheme();
-	const colors = tokens(theme.palette.mode);
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
 
-	const columns = [
-		{ field: "id", headerName: "ID", flex: 0.5 },
-		{ field: "registrarId", headerName: "Registrar ID" },
-		{
-			field: "name",
-			headerName: "Name",
-			flex: 1,
-			cellClassName: "name-column--cell",
-		},
-		{
-			field: "age",
-			headerName: "Age",
-			type: "number",
-			headerAlign: "left",
-			align: "left",
-		},
-	];
   const columns = [
     { field: "id", headerName: "ID" },
 
@@ -224,50 +192,6 @@ const Sections = () => {
     },
   ];
 
-	return (
-		<Box m="20px">
-			<Header title="SECTIONS" subtitle="List of Sections" />
-			<Box
-				m="40px 0 0 0"
-				height="75vh"
-				sx={{
-					"& .MuiDataGrid-root": {
-						border: "none",
-					},
-					"& .MuiDataGrid-cell": {
-						borderBottom: "none",
-					},
-					"& .name-column--cell": {
-						color: colors.greenAccent[300],
-					},
-					"& .MuiDataGrid-columnHeaders": {
-						backgroundColor: colors.blueAccent[700],
-						borderBottom: "none",
-					},
-					"& .MuiDataGrid-virtualScroller": {
-						backgroundColor: colors.primary[400],
-					},
-					"& .MuiDataGrid-footerContainer": {
-						borderTop: "none",
-						backgroundColor: colors.blueAccent[700],
-					},
-					"& .MuiCheckbox-root": {
-						color: `${colors.greenAccent[200]} !important`,
-					},
-					"& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-						color: `${colors.grey[100]} !important`,
-					},
-				}}
-			>
-				{alldata.map((info) => (
-					<div key={info._id}>
-						<h1>{info.info_title}</h1>
-						<p className="p">{info.info_description}</p>
-					</div>
-				))}
-			</Box>
-		</Box>
-	);
   return (
     <Box m="20px">
       <Header title="Sections" subtitle="List of Sections" />
