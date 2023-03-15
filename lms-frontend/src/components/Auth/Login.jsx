@@ -40,12 +40,14 @@ export default function Login() {
         email,
         password,
       }),
-    })
+    }
+    )
       .then((res) => res.json())
       .then((data) => {
-        console.log(data, "Logged in");
         if (data.token) {
-          toast.success("Logged in", { autoClose: 2000 });
+
+        toast.success("Logged in", { autoClose: 2000 });
+        console.log(data, "Logged in");
           window.localStorage.setItem("token", data.token);
           window.localStorage.setItem("loggedIn", true);
           window.localStorage.setItem("role", data.role);
