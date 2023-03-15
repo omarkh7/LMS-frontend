@@ -3,7 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import Topbar from "./components/Home/Topbar";
 import Sidebar from "./components/Home/Sidebar";
 
-import Bar from "./scenes/bar";
+// import Bar from "./scenes/bar"; to delete
 import Pie from "./scenes/pie";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "./theme";
@@ -19,6 +19,7 @@ import Login from "./components/Auth/Login";
 import CreateUser from "./components/Users/CreateUser";
 import Register from "./components/Auth/Register";
 import PagenotFound from "./components/Home/404 not Found/PagenotFound";
+import Attendance from "./components/Attendance/Attendance";
 
 function App() {
 	const [theme, colorMode] = useMode();
@@ -94,8 +95,8 @@ function App() {
 							/>
 							<Route
 								exact
-								path="/bar"
-								element={isLoggedIn === "true" ? <Bar /> : <Login />}
+								path="/attendance"
+								element={isLoggedIn === "true" ? <Attendance /> : <Login />}
 							/>
 							<Route
 								exact
