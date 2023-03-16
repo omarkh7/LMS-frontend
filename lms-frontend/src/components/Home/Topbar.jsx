@@ -15,11 +15,9 @@ const Topbar = () => {
   const colors = tokens(theme.palette.mode);
   const colorMode = useContext(ColorModeContext);
 
-  
   const logOut = () => {
     window.localStorage.clear();
     window.location.reload(true);
-
   };
   return (
     <Box display="flex" justifyContent="space-between" p={2}>
@@ -29,10 +27,10 @@ const Topbar = () => {
         backgroundColor={colors.primary[400]}
         borderRadius="3px"
       >
-        <InputBase sx={{ ml: 2, flex: 1 }} placeholder="Search" />
+        {/* <InputBase sx={{ ml: 2, flex: 1 }} placeholder="Search" />
         <IconButton type="button" sx={{ p: 1 }}>
           <SearchIcon />
-        </IconButton>
+        </IconButton> */}
       </Box>
 
       {/* ICONS */}
@@ -45,9 +43,9 @@ const Topbar = () => {
           )}
         </IconButton>
         <Link to="/login">
-        <IconButton onClick={logOut} >
-          <PersonOutlinedIcon/>
-        </IconButton>
+          <IconButton onClick={logOut}>
+            <PersonOutlinedIcon />
+          </IconButton>
         </Link>
       </Box>
     </Box>

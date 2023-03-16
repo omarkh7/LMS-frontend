@@ -184,11 +184,12 @@ const CreateUser = () => {
                 required
               >
                   {role === "admin" && (
-                    <>
+                    
                 <MenuItem value={1}>Admin</MenuItem>
-            
+                )}
+                {role === "admin" && (
                 <MenuItem value={2}>Teacher</MenuItem>
-                </>
+                
                 )}
                 <MenuItem value={3}>Student</MenuItem>
               </Select>
