@@ -1,22 +1,16 @@
-import React from 'react'
-import Stack from '@mui/material/Stack';
-import LinearProgress from '@mui/material/LinearProgress';
 
 
+import React from 'react';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
+import './Loader.css';
 
-function Loader() {
+export default function Loader() {
   return (
-    <div>
-       <Stack sx={{ width: '100%', color: 'grey.500' }} spacing={2}>
-      <LinearProgress color="secondary" />
-      <LinearProgress color="success" />
-      <LinearProgress color="inherit" />
-    </Stack>
+    <div className='loader'>
+      <Box sx={{ display: 'flex', color: '' }}>
+      <CircularProgress />
+    </Box>
     </div>
-  )
+  );
 }
-
-export default Loader
-
-
-

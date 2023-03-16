@@ -11,12 +11,12 @@ import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined
 import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
 import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-import ClassOutlinedIcon from '@mui/icons-material/ClassOutlined';
-import AbcOutlinedIcon from '@mui/icons-material/AbcOutlined';
-import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
-import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
-import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
-
+import ClassOutlinedIcon from "@mui/icons-material/ClassOutlined";
+import AbcOutlinedIcon from "@mui/icons-material/AbcOutlined";
+import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
+import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
+import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
+import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -41,6 +41,10 @@ const Sidebar = () => {
   const colors = tokens(theme.palette.mode);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState("Dashboard");
+
+  const isAdmin = localStorage.getItem("role") === "1";
+  const role = isAdmin ? "admin" : "teacher";
+  console.log("isAdmin ",isAdmin);
 
   return (
     <Box
@@ -90,8 +94,6 @@ const Sidebar = () => {
             )}
           </MenuItem>
 
-         
-
           <Box paddingLeft={isCollapsed ? undefined : "10%"}>
             <Item
               title="Dashboard"
@@ -108,6 +110,7 @@ const Sidebar = () => {
             >
               Users
             </Typography>
+
             <Item
               title="Create a User"
               to="/createuser"
@@ -115,13 +118,26 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
+  {role === "admin" && (
+    <>
             <Item
-              title="Admins"
-              to="/admin"
-              icon={<PeopleOutlinedIcon />}
+              title="Register"
+              to="/register"
+              icon={<PersonOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />
+          
+              <Item
+                title="Admins"
+                to="/admin"
+                icon={<PeopleOutlinedIcon />}
+                selected={selected}
+                setSelected={setSelected}
+                
+              />
+            
+
             <Item
               title="Teachers"
               to="/teacher"
@@ -129,6 +145,8 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
+              </>
+            )}
             <Item
               title="Students"
               to="/students"
@@ -151,23 +169,20 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-              <Item
+            <Item
               title="Sections"
               to="/sections"
               icon={<AbcOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />
-              <Item
+            <Item
               title="Class Section"
               to="/class-section"
               icon={<SchoolOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />
-            
-        
-            
 
             <Typography
               variant="h6"
