@@ -20,7 +20,7 @@ function handleLogout() {
         window.localStorage.removeItem('token');
         window.localStorage.removeItem('loggedIn');
         window.location.href = '/login';
-        toast.success('Logged out', {autoClose: 2000});
+        toast.success("Logged out", { autoClose: 2000 });
       } else {
         throw new Error('Logout failed');
       }

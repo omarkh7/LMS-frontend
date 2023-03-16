@@ -28,6 +28,10 @@ const Classes = () => {
   const [newClass, setNewClass] = useState({ class_name: "" });
   const [isOpen, setIsOpen] = useState(false);
 
+  const isAdmin = localStorage.getItem("role") === "1";
+  const role = isAdmin ? "admin" : "teacher";
+  console.log("isAdmin ", isAdmin);
+
   const handleOpen = () => {
     setIsOpen(true);
   };
@@ -138,6 +142,7 @@ const Classes = () => {
           <div>{params.row.class_name}</div>
         ),
     },
+
     {
       field: "edit",
       headerName: "Edit",
@@ -237,14 +242,16 @@ const Classes = () => {
             autoHeight
             disableSelectionOnClick
           />
-          <Button
-            variant="contained"
-            color="neutral"
-            startIcon={<AddIcon />}
-            onClick={handleOpen}
-          >
-            Add new Class
-          </Button>
+          {role === "admin" && (
+            <Button
+              variant="contained"
+              color="neutral"
+              startIcon={<AddIcon />}
+              onClick={handleOpen}
+            >
+              Add new Class
+            </Button>
+          )}
         </Stack>
 
         <Box mt={2} display={isOpen ? "block" : "none"}>

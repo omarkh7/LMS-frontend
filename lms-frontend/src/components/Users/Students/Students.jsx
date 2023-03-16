@@ -26,7 +26,7 @@ const Students = () => {
   const [isUpdateMode, setIsUpdateMode] = useState(false);
   const [alldata, setAllData] = useState([]);
   const [imageFile, setImageFile] = useState(null);
-const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   const [newData, setNewData] = useState({
     username: "",
