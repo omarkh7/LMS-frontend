@@ -2,8 +2,6 @@ import { Box, TextField, Button, Stack, Input } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { tokens } from "../../../theme";
 import Header from "../../Header";
-// import InputBase from "@mui/material/InputBase";
-import imgs from "../../user.png";
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
@@ -11,8 +9,6 @@ import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
 import "react-toastify/dist/ReactToastify.css";
 import RemoveOutlinedIcon from "@mui/icons-material/RemoveOutlined";
 import { IconButton } from "@mui/material";
-// import SearchIcon from "@mui/icons-material/Search";
-
 import {
   Delete as DeleteIcon,
   Edit as EditIcon,
@@ -381,7 +377,6 @@ const Admins = () => {
           columns={columns}
           components={{ Toolbar: GridToolbar }}
           pageSize={10}
-          // rowsPerPageOptions={[5, 10, 25]}
           autoHeight
           disableSelectionOnClick
         />
