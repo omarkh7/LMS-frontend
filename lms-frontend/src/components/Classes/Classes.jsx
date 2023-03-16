@@ -12,6 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { IconButton } from "@mui/material";
 // import SearchIcon from "@mui/icons-material/Search";
 
+import Loader from '../Home/Loader/Loader'
 import {
   Delete as DeleteIcon,
   Edit as EditIcon,
@@ -27,7 +28,7 @@ const Classes = () => {
   const [alldata, setAllData] = useState([]);
   const [newClass, setNewClass] = useState({ class_name: "" });
   const [isOpen, setIsOpen] = useState(false);
-
+  const [isLoading, setIsLoading] = useState(false);
   const isAdmin = localStorage.getItem("role") === "1";
   const role = isAdmin ? "admin" : "teacher";
   console.log("isAdmin ", isAdmin);
@@ -39,46 +40,64 @@ const Classes = () => {
   const apiURL = "http://localhost:8000/api/classes";
 
   const fetchallData = async () => {
+    
     try {
+      setIsLoading(true);
       const token = localStorage.getItem("token");
       const response = await axios.get(apiURL, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
+
       });
       console.log(response.data);
       setAllData(response.data);
+      setIsLoading(false);
+
     } catch (error) {
       console.error(error);
+      setIsLoading(false);
     }
+    
   };
 
   const addClass = async () => {
+   
     try {
+      setIsLoading(true);
       const token = localStorage.getItem("token");
       await axios.post(apiURL, newClass, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
+      setIsLoading(false);
       toast.success("Added Successfully", 2000);
       fetchallData();
       setNewClass({ class_name: "" });
     } catch (error) {
       console.error(error);
       toast.error("Add Failed", 2000);
-    }
+      setIsLoading(false); }
   };
 
   const deleteUser = async (id) => {
+    try{
+      setIsLoading(true);
     const token = localStorage.getItem("token");
-    axios.delete(`http://localhost:8000/api/classes/${id}`, {
+    await axios.delete(`http://localhost:8000/api/classes/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
     toast.success("Deleted Successfully", 2000);
     fetchallData();
+    setIsLoading(false);
+  }catch (error) {
+    console.error(error);
+    toast.error("Delete Failed", 2000);
+    setIsLoading(false);
+  }
   };
 
   const handleUpdate = (id, field, value) => {
@@ -92,6 +111,7 @@ const Classes = () => {
     setIsUpdateMode(false);
     setSelectedInfo({});
     try {
+      setIsLoading(true);
       const token = localStorage.getItem("token");
       axios.put(
         `${apiURL}/${id}`,
@@ -102,14 +122,20 @@ const Classes = () => {
           },
         }
       );
+      setIsLoading(false);
       toast.success("Updated Successfully", 2000);
+     
     } catch (error) {
       console.error(error);
       toast.error("Update Failed", 2000);
     }
+    finally {
+      setIsLoading(false); // Set isLoading back to false when request is completed
+    }
   };
 
   useEffect(() => {
+ 
     fetchallData();
   }, []);
 
@@ -198,6 +224,8 @@ const Classes = () => {
   ];
 
   return (
+    <div>
+      {isLoading ? <Loader/>: (
     <Box m="20px">
       <Header title="CLASSES" subtitle="List of Classes" />
       <Box
@@ -233,6 +261,7 @@ const Classes = () => {
         }}
       >
         <Stack direction="column">
+        
           <DataGrid
             rows={alldata}
             columns={columns}
@@ -255,7 +284,7 @@ const Classes = () => {
         </Stack>
 
         <Box mt={2} display={isOpen ? "block" : "none"}>
-          <TextField
+       <TextField
             fullWidth
             label="New Class Name"
             variant="outlined"
@@ -280,8 +309,11 @@ const Classes = () => {
 
         <ToastContainer />
       </Box>
-    </Box>
+    </Box>)
+}
+    </div>
   );
+  
 };
 
 export default Classes;

@@ -19,11 +19,11 @@ import Login from "./components/Auth/Login";
 import CreateUser from "./components/Users/CreateUser";
 import Register from "./components/Auth/Register";
 import PagenotFound from "./components/Home/404 not Found/PagenotFound";
-
-
+import Loader from './components/Home/Loader/Loader'
 
 
 function App() {
+  const [loading, setLoading] = useState(false);
   const [theme, colorMode] = useMode();
   const [isSidebar, setIsSidebar] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(
@@ -35,6 +35,7 @@ function App() {
   }, []);
 
   return (
+  
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
@@ -43,7 +44,7 @@ function App() {
           <main className="content">
             {isLoggedIn === "true" && <Topbar setIsSidebar={setIsSidebar} />}
 
-            <Routes>
+            { loading ? <Loader /> : <Routes> 
 
         <Route exact path="/*" element={<PagenotFound/>} />
 
@@ -112,7 +113,7 @@ function App() {
                 path="/calendar"
                 element={isLoggedIn === "true" ? <Calendar /> : <Login />}
               />
-            </Routes>
+            </Routes>}
           </main>
         </div>
       </ThemeProvider>
