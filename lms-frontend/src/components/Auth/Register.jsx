@@ -45,7 +45,7 @@ const Register = () => {
   const register = (event) => {
     event.preventDefault();
 
-  // Add this if statement to check if the passwords match
+  // check if the passwords match
   if (formData.password !== formData.password_confirmation) {
     toast.error("Password confirmation error");
     return;

@@ -61,33 +61,45 @@ const ClassSection = () => {
 
     }
   };
-  const addClass = async () => {
-    try {
-      setIsLoading(true);
 
-      const token = localStorage.getItem("token");
-      await axios.post(
-        apiURL,
-        { class_id: newData.class_id, section_id: newData.section_id },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      toast.success("Added Successfully", { autoClose: 2000 });
-      fetchallData();
-      setNewData({ class_id: "", section_id: "" });
-      setIsLoading(false);
+  //conditional adding ,,, if same class id check different section id
+  
+      // if ((newData.class_id === allData.class_id) && (newData.section_id === allData.section_id)){
+      //   toast.error("The provided class already has this section id, add a new section", { autoClose: 2000 })
+      // };
 
-    } catch (error) {
-      console.error(error);
-      setIsLoading(false);
-      toast.error("Add Failed", { autoClose: 2000 });
-     
+const addClass = async () => {
+  try {
+    setIsLoading(true);
 
-    }
-  };
+    const token = localStorage.getItem("token");
+    await axios.post(
+      apiURL,
+      { class_id: newData.class_id, section_id: newData.section_id },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    toast.success("Added Successfully", { autoClose: 2000 });
+    fetchallData();
+    setNewData({ class_id: "", section_id: "" });
+    setIsLoading(false);
+
+  } catch (error) {
+    console.error(error);
+    setIsLoading(false);
+    toast.error("Add Failed", { autoClose: 2000 });
+   
+
+  }
+};
+
+
+
+
+  //
 
   const deleteUser = async (id) => {
     const token = localStorage.getItem("token");

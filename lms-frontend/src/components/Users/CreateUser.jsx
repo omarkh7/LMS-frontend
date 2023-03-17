@@ -90,6 +90,9 @@ const CreateUser = () => {
           role: "",
           image: null,
           phonenb: null,
+          // class: "",
+          // class_section: "",
+
         });
         
       })
@@ -183,15 +186,15 @@ const CreateUser = () => {
                 onChange={handleInputChange}
                 required
               >
-                  {role === "admin" && (
+                  {/* {role === "admin" && (
                     
                 <MenuItem value={1}>Admin</MenuItem>
                 )}
                 {role === "admin" && (
                 <MenuItem value={2}>Teacher</MenuItem>
                 
-                )}
-                <MenuItem value={3}>Student</MenuItem>
+                )} */}
+                <MenuItem value={1}>Student</MenuItem>
               </Select>
             </FormControl>
           </div>
