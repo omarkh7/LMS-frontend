@@ -19,6 +19,8 @@ import Login from "./components/Auth/Login";
 import CreateUser from "./components/Users/CreateUser";
 import Register from "./components/Auth/Register";
 import PagenotFound from "./components/Home/404 not Found/PagenotFound";
+import StudentAttendance from "./components/Attendance/StudentAttendance";
+import TeacherAttendance from "./components/Attendance/TeacherAttendance";
 
 
 
@@ -99,13 +101,13 @@ function App() {
               />
               <Route
                 exact
-                path="/bar"
-                element={isLoggedIn === "true" ? <Bar /> : <Login />}
+                path="/StudentAttendance"
+                element={isLoggedIn === "true" ? <StudentAttendance /> : <Login />}
               />
               <Route
                 exact
-                path="/pie"
-                element={isLoggedIn === "true" ? <Pie /> : <Login />}
+                path="/TeacherAttendance"
+                element={isLoggedIn === "true" ? <TeacherAttendance /> : <Login />}
               />
               <Route
                 exact

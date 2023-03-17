@@ -199,19 +199,19 @@ const Sidebar = () => {
               setSelected={setSelected}
             />
             <Item
-              title="Attendance"
-              to="/bar"
+              title="Student Attendance"
+              to="/StudentAttendance"
               icon={<BarChartOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
-            />
+            />            
             <Item
-              title="testing"
-              to="/pie"
-              icon={<PieChartOutlineOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
+            title="Teacher Attendance"
+            to="/TeacherAttendance"
+            icon={<BarChartOutlinedIcon />}
+            selected={selected}
+            setSelected={setSelected}
+          />
           </Box>
         </Menu>
       </ProSidebar>
