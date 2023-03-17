@@ -10,7 +10,8 @@ import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
 import "react-toastify/dist/ReactToastify.css";
 import RemoveOutlinedIcon from "@mui/icons-material/RemoveOutlined";
 import { IconButton } from "@mui/material";
-
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 import {
   Delete as DeleteIcon,
   Edit as EditIcon,
@@ -58,13 +59,31 @@ const Admins = () => {
 
   const deleteUser = async (id) => {
     const token = localStorage.getItem("token");
-    axios.delete(`http://localhost:8000/api/users/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+  
+    confirmAlert({
+      title: 'Confirm Deletion',
+      message: 'Are you sure you want to delete this Admin?',
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: async () => {
+            await axios.delete(`http://localhost:8000/api/users/${id}`, {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            });
+            toast.success("Deleted Successfully", 2000);
+            fetchallData();
+          }
+        },
+        {
+          label: 'No',
+          onClick: () => {
+            toast.error("Canceled", 2000);
+          }
+        }
+      ]
     });
-    toast.success("Deleted Successfully", 2000);
-    fetchallData();
   };
 
   const handleUpdate = async (e, id, field, value) => {

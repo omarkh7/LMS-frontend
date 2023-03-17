@@ -89,7 +89,7 @@ const CreateUser = () => {
           lastname: "",
           role: "",
           image: null,
-          phonenb: null,
+          phonenb: "",
         });
         
       })

@@ -11,8 +11,8 @@ import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
 import "react-toastify/dist/ReactToastify.css";
 import { IconButton } from "@mui/material";
 // import SearchIcon from "@mui/icons-material/Search";
-
-import Loader from '../Home/Loader/Loader'
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 import {
   Delete as DeleteIcon,
   Edit as EditIcon,
@@ -81,23 +81,42 @@ const Classes = () => {
       setIsLoading(false); }
   };
 
+
   const deleteUser = async (id) => {
-    try{
-      setIsLoading(true);
     const token = localStorage.getItem("token");
-    await axios.delete(`http://localhost:8000/api/classes/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+    
+    confirmAlert({
+      title: 'Confirm Deletion',
+      message: 'Are you sure you want to delete this item?',
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: async () => {
+            try {
+              setIsLoading(true);
+              await axios.delete(`http://localhost:8000/api/classes/${id}`, {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              });
+              toast.success("Deleted Successfully", 2000);
+              fetchallData();
+              setIsLoading(false);
+            } catch (error) {
+              console.error(error);
+              toast.error("Delete Failed", 2000);
+              setIsLoading(false);
+            }
+          }
+        },
+        {
+          label: 'No',
+          onClick: () => {
+            toast.error("Canceled", 2000);
+          }
+        }
+      ]
     });
-    toast.success("Deleted Successfully", 2000);
-    fetchallData();
-    setIsLoading(false);
-  }catch (error) {
-    console.error(error);
-    toast.error("Delete Failed", 2000);
-    setIsLoading(false);
-  }
   };
 
   const handleUpdate = (id, field, value) => {
@@ -225,7 +244,6 @@ const Classes = () => {
 
   return (
     <div>
-      {isLoading ? <Loader/>: (
     <Box m="20px">
       <Header title="CLASSES" subtitle="List of Classes" />
       <Box
@@ -309,8 +327,8 @@ const Classes = () => {
 
         <ToastContainer />
       </Box>
-    </Box>)
-}
+    </Box>
+
     </div>
   );
   

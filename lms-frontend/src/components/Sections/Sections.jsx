@@ -11,6 +11,8 @@ import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
 import "react-toastify/dist/ReactToastify.css";
 import { IconButton } from "@mui/material";
 // import SearchIcon from "@mui/icons-material/Search";
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
 
 import {
   Delete as DeleteIcon,
@@ -68,13 +70,36 @@ const Sections = () => {
 
   const deleteUser = async (id) => {
     const token = localStorage.getItem("token");
-    axios.delete(`http://localhost:8000/api/sections/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+
+    confirmAlert({
+      title: "Confirm Deletion",
+      message: "Are you sure you want to delete this item?",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: async () => {
+            try {
+              await axios.delete(`http://localhost:8000/api/sections/${id}`, {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              });
+              toast.success("Deleted Successfully", 2000);
+              fetchallData();
+            } catch (error) {
+              console.error(error);
+              toast.error("Delete Failed", 2000);
+            }
+          },
+        },
+        {
+          label: "No",
+          onClick: () => {
+            toast.error("Canceled", 2000);
+          },
+        },
+      ],
     });
-    toast.success("Deleted Successfully", 2000);
-    fetchallData();
   };
 
   const handleUpdate = (id, field, value) => {
@@ -257,8 +282,7 @@ const Sections = () => {
               setNewClass({ ...newClass, section_name: e.target.value })
             }
           />
-                    <Box sx={{ m: 1 }} />
-
+          <Box sx={{ m: 1 }} />
           <Button variant="contained" color="neutral" onClick={addClass}>
             Add
           </Button>{" "}
@@ -270,7 +294,6 @@ const Sections = () => {
             Cancel
           </Button>
           <Box sx={{ p: 3 }} />
-
         </Box>
 
         <ToastContainer />

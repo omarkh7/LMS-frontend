@@ -19,7 +19,6 @@ import Login from "./components/Auth/Login";
 import CreateUser from "./components/Users/CreateUser";
 import Register from "./components/Auth/Register";
 import PagenotFound from "./components/Home/404 not Found/PagenotFound";
-import Loader from './components/Home/Loader/Loader'
 
 
 function App() {
@@ -44,7 +43,7 @@ function App() {
           <main className="content">
             {isLoggedIn === "true" && <Topbar setIsSidebar={setIsSidebar} />}
 
-            { loading ? <Loader /> : <Routes> 
+           <Routes> 
 
         <Route exact path="/*" element={<PagenotFound/>} />
 
@@ -113,7 +112,7 @@ function App() {
                 path="/calendar"
                 element={isLoggedIn === "true" ? <Calendar /> : <Login />}
               />
-            </Routes>}
+            </Routes>
           </main>
         </div>
       </ThemeProvider>
