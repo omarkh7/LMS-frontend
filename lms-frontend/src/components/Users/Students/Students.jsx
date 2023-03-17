@@ -21,7 +21,39 @@ import {
 
 import { useTheme } from "@mui/material";
 
+
+
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+import Attendance from "../../Attendance/Attendance";
+import { Typography } from '@material-ui/core';
+
+// function StudentList(props) 
+
 const Students = () => {
+
+  const [attendance, setAttendance] = useState([]);
+  const handleAttendanceChange = (index, value) => {
+    const newAttendance = [...attendance];
+    newAttendance[index] = value;
+    setAttendance(newAttendance);
+  };
+  
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log(attendance); // Do something with the attendance data
+  };
+  const rows = [
+    { id: 1, name: 'John', attendance: 'Present' },
+    { id: 2, name: 'Jane', attendance: 'Absent' },
+    { id: 3, name: 'Bob', attendance: 'Late' },
+  ];
+  
+
+
   const [selectedInfo, setSelectedInfo] = useState({});
   const [isUpdateMode, setIsUpdateMode] = useState(false);
   const [alldata, setAllData] = useState([]);
@@ -345,6 +377,39 @@ const [loading, setLoading] = useState(true);
     <Box m="20px">
       {console.log("all data ", alldata)}
       <Header title="Student" subtitle="List of Students" />
+      <form onSubmit={handleSubmit}>
+  <Box display="flex" alignItems="center">
+    <Typography variant="h5" component="h1" flexGrow={1}>
+      Attendance
+    </Typography>
+    <Button type="submit" variant="contained">
+      Save Attendance
+    </Button>
+  </Box>
+  <Box mt={2}>
+    <DataGrid rows={rows} columns={columns} />
+  </Box>
+  <Box mt={2}>
+    {loading ? (
+      <CircularProgress />
+    ) : (
+      alldata.map((row, index) => (
+        <Box key={row.id} display="flex" alignItems="center" mt={2}>
+          <Typography variant="subtitle1" component="div" flexGrow={1}>
+            {row.firstname} {row.lastname}
+          </Typography>
+          <Attendance
+            attendance={attendance[index]}
+            handleAttendanceChange={(event) =>
+              handleAttendanceChange(index, event.target.value)
+            }
+          />
+        </Box>
+      ))
+    )}
+  </Box>
+</form>
+
       <Box
         m="40px 0 0 0"
         height="75vh"

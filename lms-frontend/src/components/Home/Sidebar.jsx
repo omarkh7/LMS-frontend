@@ -11,13 +11,12 @@ import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined
 import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
 import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-import ClassOutlinedIcon from '@mui/icons-material/ClassOutlined';
-import AbcOutlinedIcon from '@mui/icons-material/AbcOutlined';
-import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
-import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
-import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+import ClassOutlinedIcon from "@mui/icons-material/ClassOutlined";
+import AbcOutlinedIcon from "@mui/icons-material/AbcOutlined";
+import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
+import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
+import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
-
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
 	const theme = useTheme();
@@ -108,41 +107,40 @@ const Sidebar = () => {
 							Users
 						</Typography>
 						<Item
-              title="Create a User"
-              to="/createuser"
-              icon={<AddOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />            
-            <Item
-            title="Register"
-            to="/register"
-            icon={<PersonOutlinedIcon />}
-            selected={selected}
-            setSelected={setSelected}
-          />
-            <Item
-              title="Admins"
-              to="/admin"
-              icon={<PeopleOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="Teachers"
-              to="/teacher"
-              icon={<ContactsOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="Students"
-              to="/students"
-              icon={<GroupsOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-
+							title="Create a User"
+							to="/createuser"
+							icon={<AddOutlinedIcon />}
+							selected={selected}
+							setSelected={setSelected}
+						/>
+						<Item
+							title="Register"
+							to="/register"
+							icon={<PersonOutlinedIcon />}
+							selected={selected}
+							setSelected={setSelected}
+						/>
+						<Item
+							title="Admins"
+							to="/admin"
+							icon={<PeopleOutlinedIcon />}
+							selected={selected}
+							setSelected={setSelected}
+						/>
+						<Item
+							title="Teachers"
+							to="/teacher"
+							icon={<ContactsOutlinedIcon />}
+							selected={selected}
+							setSelected={setSelected}
+						/>
+						<Item
+							title="Students"
+							to="/students"
+							icon={<GroupsOutlinedIcon />}
+							selected={selected}
+							setSelected={setSelected}
+						/>
 
 						<Typography
 							variant="h6"
@@ -172,14 +170,6 @@ const Sidebar = () => {
 							selected={selected}
 							setSelected={setSelected}
 						/>
-            <Typography
-              variant="h6"
-              color={colors.grey[300]}
-              sx={{ m: "15px 0 5px 20px" }}
-            >
-              Users
-            </Typography>
-  
 						<Typography
 							variant="h6"
 							color={colors.grey[300]}
