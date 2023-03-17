@@ -73,7 +73,7 @@ const Sections = () => {
 
     confirmAlert({
       title: "Confirm Deletion",
-      message: "Are you sure you want to delete this item?",
+      message: "Are you sure you want to delete this Section?",
       buttons: [
         {
           label: "Yes",

@@ -79,7 +79,7 @@ const ClassSection = () => {
     
     confirmAlert({
       title: 'Confirm Deletion',
-      message: 'Are you sure you want to delete this item?',
+      message: 'Are you sure you want to delete this Class Section?',
       buttons: [
         {
           label: 'Yes',
