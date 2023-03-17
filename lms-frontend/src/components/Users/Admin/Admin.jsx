@@ -2,7 +2,6 @@ import { Box, TextField, Button, Stack, Input } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { tokens } from "../../../theme";
 import Header from "../../Header";
-// import InputBase from "@mui/material/InputBase";
 import imgs from "../../user.png";
 import axios from "axios";
 import React, { useState, useEffect } from "react";
@@ -11,14 +10,12 @@ import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
 import "react-toastify/dist/ReactToastify.css";
 import RemoveOutlinedIcon from "@mui/icons-material/RemoveOutlined";
 import { IconButton } from "@mui/material";
-// import SearchIcon from "@mui/icons-material/Search";
 
 import {
   Delete as DeleteIcon,
   Edit as EditIcon,
   Save as SaveIcon,
 } from "@mui/icons-material";
-import AddIcon from "@mui/icons-material/Add";
 
 import { useTheme } from "@mui/material";
 
@@ -70,7 +67,10 @@ const Admins = () => {
     fetchallData();
   };
 
-  const handleUpdate = async (id, field, value) => {
+  const handleUpdate = async (e, id, field, value) => {
+    e.preventDefault();
+
+    console.log("handle ");
     const updatedData = alldata.map((row) => {
       if (row.id === id) {
         console.log("row ", row);
@@ -79,34 +79,32 @@ const Admins = () => {
       return row;
     });
 
-    console.log("updated data ", updatedData);
-    // setAllData(updatedData);
-    // setIsUpdateMode(false);
-    // setSelectedInfo({});
+    console.log("updated data ", selectedInfo);
+
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.put(
-        `${apiURL}/${id}`,
-        {
-          username: selectedInfo.username,
-          email: selectedInfo.email,
-          firstname: selectedInfo.firstname,
-          lastname: selectedInfo.lastname,
-          role: selectedInfo.role,
-          image: selectedInfo.image,
-          phonenb: selectedInfo.phonenb,
+      const formData = new FormData();
+      formData.append("username", selectedInfo.username);
+      formData.append("email", selectedInfo.email);
+      formData.append("firstname", selectedInfo.firstname);
+      formData.append("lastname", selectedInfo.lastname);
+      formData.append("role", selectedInfo.role);
+      formData.append("phonenb", selectedInfo.phonenb);
+      if (imageFile) {
+        formData.append("image", imageFile);
+      }
+      console.log("Form 11", formData.get("image"));
+      const response = await axios.post(`${apiURL}/${id}`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
         },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      });
 
       console.log("Updated Successfully ", response);
-      setAllData(response.data);
       setIsUpdateMode(false);
       setSelectedInfo({});
+      setImageFile(null);
       toast.success("Updated Successfully", 2000);
     } catch (error) {
       console.error(error);
@@ -116,7 +114,7 @@ const Admins = () => {
 
   useEffect(() => {
     fetchallData();
-  }, []);
+  }, [selectedInfo]);
 
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -127,24 +125,32 @@ const Admins = () => {
     {
       field: "image",
       headerName: "Image",
-      flex: 1,
+      flex: 2,
       cellClassName: "name-column--cell",
       valueGetter: (params) => params.row.image,
       renderCell: (params) => {
-        const handleImageChange = (event) => {
-          setSelectedInfo({
-            ...selectedInfo,
-            image: event.target.files[0],
+        const handleImageChange = (event, id) => {
+          const file = event.target.files[0];
+          setImageFile(file);
+          const updatedData = alldata.map((row) => {
+            if (row.id === id) {
+              return { ...row, image: file };
+            }
+            return row;
           });
+          setAllData(updatedData);
         };
 
         return isUpdateMode && selectedInfo.id === params.row.id ? (
           <Box display="flex" alignItems="center">
-            <Input
+                 <Input
               type="file"
               disableUnderline
               fullWidth
-              onChange={handleImageChange}
+              inputProps={{
+                style: { color: "#faaf40" },
+              }}
+              onChange={(event) => handleImageChange(event, params.row.id)}
             />
           </Box>
         ) : params.row.image ? (
@@ -153,6 +159,9 @@ const Admins = () => {
             alt={params.row.image}
             width={50}
             height={50}
+            onError={(e) => {
+              e.target.src = <RemoveOutlinedIcon />;
+            }}
           />
         ) : (
           <RemoveOutlinedIcon />
@@ -286,8 +295,9 @@ const Admins = () => {
         isUpdateMode && selectedInfo.id === params.row.id ? (
           <div>
             <IconButton
-              onClick={() => {
+              onClick={(e) => {
                 handleUpdate(
+                  e,
                   params.row.id,
                   "image" ||
                     "username" ||

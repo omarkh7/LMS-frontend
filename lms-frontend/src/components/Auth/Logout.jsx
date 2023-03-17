@@ -6,9 +6,8 @@ import 'react-toastify/dist/ReactToastify.css';
 function Logout() {
 
  
-function handleLogout() {
   fetch('http://localhost:8000/api/logout', {
-    method: 'DELETE',
+    method: 'POST',
     headers: {
       Authorization: `Bearer ${window.localStorage.getItem('token')}`,
       Accept: 'application/json',
@@ -33,9 +32,9 @@ function handleLogout() {
 
   return (
     <div>
-      <Button onClick={handleLogout}/>
+      <Button onClick={Logout}/>
     </div>
   )
-}
+
 
 export default Logout

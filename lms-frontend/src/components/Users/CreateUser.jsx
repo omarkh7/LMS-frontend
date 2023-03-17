@@ -183,10 +183,7 @@ const CreateUser = () => {
                 onChange={handleInputChange}
                 required
               >
-                  {role === "admin" && (
-                    
-                <MenuItem value={1}>Admin</MenuItem>
-                )}
+              
                 {role === "admin" && (
                 <MenuItem value={2}>Teacher</MenuItem>
                 

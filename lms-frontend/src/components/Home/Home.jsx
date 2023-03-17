@@ -129,7 +129,7 @@ const Home = () => {
     <Box m="20px">
       {/* HEADER */}
       <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Header title="DASHBOARD" subtitle="Welcome to your dashboard" />
+        <Header title="DASHBOARD" subtitle="Welcome`${}` to your dashboard" />
 
    
       </Box>
@@ -173,7 +173,7 @@ const Home = () => {
       <StatBox
         title={StudentData.length}
         subtitle="Students"
-        progress={StudentData.length * 0.01}
+        progress={StudentData.length *0.01}
         icon={
           <GroupsOutlinedIcon
             sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
