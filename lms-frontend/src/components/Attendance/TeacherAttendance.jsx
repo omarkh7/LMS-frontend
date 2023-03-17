@@ -1,7 +1,8 @@
 import { Box, TextField, Button, Stack, Input } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
-import { tokens } from "../../../theme";
-import Header from "../../Header";
+import { tokens } from "../../theme";
+import Header from "../Header";
+import imgs from "../user.png";
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
@@ -9,6 +10,7 @@ import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
 import "react-toastify/dist/ReactToastify.css";
 import RemoveOutlinedIcon from "@mui/icons-material/RemoveOutlined";
 import { IconButton } from "@mui/material";
+
 import {
   Delete as DeleteIcon,
   Edit as EditIcon,
@@ -18,7 +20,7 @@ import AddIcon from "@mui/icons-material/Add";
 
 import { useTheme } from "@mui/material";
 
-const Admins = () => {
+const TeacherAttendance = () => {
   const [selectedInfo, setSelectedInfo] = useState({});
   const [isUpdateMode, setIsUpdateMode] = useState(false);
   const [alldata, setAllData] = useState([]);
@@ -339,7 +341,7 @@ const Admins = () => {
   return (
     <Box m="20px">
       {console.log("all data ", alldata)}
-      <Header title="Admins" subtitle="List of Admins" />
+      <Header title="Teachers" subtitle="List of Teachers" />
       <Box
         m="40px 0 0 0"
         height="75vh"
@@ -373,10 +375,11 @@ const Admins = () => {
         }}
       >
         <DataGrid
-          rows={alldata.filter((data) => data.role == 1)}
+          rows={alldata.filter((data) => data.role == 2)}
           columns={columns}
           components={{ Toolbar: GridToolbar }}
           pageSize={10}
+          // rowsPerPageOptions={[5, 10, 25]}
           autoHeight
           disableSelectionOnClick
         />
@@ -387,4 +390,4 @@ const Admins = () => {
   );
 };
 
-export default Admins;
+export default TeacherAttendance;

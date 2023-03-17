@@ -50,6 +50,8 @@ export default function Login() {
         console.log(data, "Logged in");
           window.localStorage.setItem("token", data.token);
           window.localStorage.setItem("loggedIn", true);
+          window.localStorage.setItem("role", data.role);
+
           window.location.href = "/";
         } else {
           toast.error("Invalid email or password", { autoClose: 2000 });
