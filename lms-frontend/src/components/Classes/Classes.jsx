@@ -90,13 +90,15 @@ const Classes = () => {
         Authorization: `Bearer ${token}`,
       },
     });
+    setIsLoading(false);
     toast.success("Deleted Successfully", 2000);
     fetchallData();
-    setIsLoading(false);
+    
   }catch (error) {
     console.error(error);
-    toast.error("Delete Failed", 2000);
     setIsLoading(false);
+    toast.error("Delete Failed", 2000);
+   
   }
   };
 

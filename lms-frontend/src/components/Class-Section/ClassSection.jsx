@@ -20,10 +20,13 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 
 import { useTheme } from "@mui/material";
+import Loader from "../Home/Loader/Loader";
 
 const ClassSection = () => {
   const [selectedInfo, setSelectedInfo] = useState({});
   const [isUpdateMode, setIsUpdateMode] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
   const [alldata, setAllData] = useState([]);
   const [newData, setNewData] = useState({
     class_id: "",
@@ -39,6 +42,8 @@ const ClassSection = () => {
 
   const fetchallData = async () => {
     try {
+      setIsLoading(true);
+
       const token = localStorage.getItem("token");
       const response = await axios.get(apiURL, {
         headers: {
@@ -47,13 +52,19 @@ const ClassSection = () => {
       });
       console.log("fetch data ",response.data);
       setAllData(response.data);
+      setIsLoading(false);
+
 
     } catch (error) {
       console.error(error);
+      setIsLoading(false);
+
     }
   };
   const addClass = async () => {
     try {
+      setIsLoading(true);
+
       const token = localStorage.getItem("token");
       await axios.post(
         apiURL,
@@ -67,14 +78,21 @@ const ClassSection = () => {
       toast.success("Added Successfully", { autoClose: 2000 });
       fetchallData();
       setNewData({ class_id: "", section_id: "" });
+      setIsLoading(false);
+
     } catch (error) {
       console.error(error);
+      setIsLoading(false);
       toast.error("Add Failed", { autoClose: 2000 });
+     
+
     }
   };
 
   const deleteUser = async (id) => {
     const token = localStorage.getItem("token");
+    setIsLoading(true);
+
     axios.delete(`http://localhost:8000/api/classsections/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -82,6 +100,8 @@ const ClassSection = () => {
     });
     toast.success("Deleted Successfully", 2000);
     fetchallData();
+    setIsLoading(false);
+
   };
 
   const handleUpdate = async (id, field, value) => {
@@ -98,6 +118,8 @@ const ClassSection = () => {
     // setIsUpdateMode(false);
     // setSelectedInfo({});
     try {
+      setIsLoading(true);
+
       const token = localStorage.getItem("token");
       const response = await axios.put(
         `${apiURL}/${id}`,
@@ -114,9 +136,13 @@ const ClassSection = () => {
 
       console.log("Updated Successfully ",response);
       setAllData(response.data);
+
       setIsUpdateMode(false);
       setSelectedInfo({});
+      setIsLoading(false);
+
       toast.success("Updated Successfully", 2000);
+
     } catch (error) {
       console.error(error);
       toast.error("Update Failed", 2000);
@@ -234,6 +260,8 @@ const ClassSection = () => {
   ];
 
   return (
+    <div>
+      {isLoading ? <Loader /> : (
     <Box m="20px">
       {      console.log("all data ",alldata)
 }
@@ -326,7 +354,8 @@ const ClassSection = () => {
 
         <ToastContainer />
       </Box>
-    </Box>
+    </Box>)}
+    </div>
   );
 };
 

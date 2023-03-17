@@ -39,8 +39,19 @@ const Register = () => {
     setErrors({ ...errors, [name]: value ? "" : "This field is required" });
   };
 
+ 
+
+
   const register = (event) => {
     event.preventDefault();
+
+  // Add this if statement to check if the passwords match
+  if (formData.password !== formData.password_confirmation) {
+    toast.error("Password confirmation error");
+    return;
+  }
+
+
     const data = new FormData();
     data.append("name", formData.name);
     data.append("email", formData.email);

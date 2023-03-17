@@ -44,6 +44,7 @@ const Home = () => {
         },
       });
       console.log("fetch data ", response.data);
+      console.log(response.data)
       setAllData(response.data);
     } catch (error) {
       console.error(error);
@@ -117,6 +118,8 @@ const Home = () => {
   const colors = tokens(theme.palette.mode);
   const teacherData = alldata.filter((info) => info.role === 2);
   const StudentData = alldata.filter((info) => info.role === 3);
+  const adminData = alldata.filter((info) => info.role === 1);
+
   const ClassesData = allclassesdata;
   const SectionData = allsectiondata;
 
@@ -129,7 +132,7 @@ const Home = () => {
     <Box m="20px">
       {/* HEADER */}
       <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Header title="DASHBOARD" subtitle="Welcome to your dashboard" />
+        <Header title="DASHBOARD" subtitle={(teacherData.userName) || (adminData.userName)} />
 
    
       </Box>

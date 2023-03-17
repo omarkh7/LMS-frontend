@@ -20,13 +20,14 @@ import {
 } from "@mui/icons-material";
 
 import { useTheme } from "@mui/material";
+import Loader from "../../Home/Loader/Loader";
 
 const Students = () => {
   const [selectedInfo, setSelectedInfo] = useState({});
   const [isUpdateMode, setIsUpdateMode] = useState(false);
   const [alldata, setAllData] = useState([]);
   const [imageFile, setImageFile] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [isloading, setIsLoading] = useState(true);
 
   const [newData, setNewData] = useState({
     username: "",
@@ -45,8 +46,9 @@ const Students = () => {
   const apiURL = "http://localhost:8000/api/users";
 
   const fetchallData = async () => {
-    setLoading(true);
+    
     try {
+      setIsLoading(true);
       const token = localStorage.getItem("token");
       const response = await axios.get(apiURL, {
         headers: {
@@ -55,19 +57,23 @@ const Students = () => {
       });
       console.log("fetch data ", response.data);
       setAllData(response.data);
+      setIsLoading(false);
     } catch (error) {
       console.error(error);
+      setIsLoading(false);
     }
-    setLoading(false);
+    
   };
 
   const deleteUser = async (id) => {
     const token = localStorage.getItem("token");
+    setIsLoading(true);
     axios.delete(`http://localhost:8000/api/users/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
+    setIsLoading(false);
     toast.success("Deleted Successfully", 2000);
     fetchallData();
   };
@@ -84,6 +90,7 @@ const Students = () => {
     console.log("updated data ", updatedData);
 
     try {
+      setIsLoading(true);
       const token = localStorage.getItem("token");
       const response = await axios.put(
         `${apiURL}/${id}`,
@@ -108,9 +115,11 @@ const Students = () => {
       setAllData(response.data);
       setIsUpdateMode(false);
       setSelectedInfo({});
+      setIsLoading(false);
       toast.success("Updated Successfully", 2000);
     } catch (error) {
       console.error(error);
+      setIsLoading(false);
       toast.error("Update Failed", 2000);
     }
   };
@@ -342,6 +351,9 @@ const Students = () => {
   ];
 
   return (
+    <div>
+{ isloading ? <Loader /> : (
+    
     <Box m="20px">
       {console.log("all data ", alldata)}
       <Header title="Student" subtitle="List of Students" />
@@ -389,7 +401,7 @@ const Students = () => {
 
         <ToastContainer />
       </Box>
-    </Box>
+    </Box> )}</div>
   );
 };
 

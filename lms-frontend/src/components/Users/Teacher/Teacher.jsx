@@ -21,8 +21,11 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 
 import { useTheme } from "@mui/material";
+import Loader from "../../Home/Loader/Loader";
 
 const Teachers = () => {
+  const [isLoading, setIsLoading] = useState(false);
+
   const [selectedInfo, setSelectedInfo] = useState({});
   const [isUpdateMode, setIsUpdateMode] = useState(false);
   const [alldata, setAllData] = useState([]);
@@ -46,6 +49,8 @@ const Teachers = () => {
 
   const fetchallData = async () => {
     try {
+      setIsLoading(true);
+
       const token = localStorage.getItem("token");
       const response = await axios.get(apiURL, {
         headers: {
@@ -54,13 +59,19 @@ const Teachers = () => {
       });
       console.log("fetch data ", response.data);
       setAllData(response.data);
+      setIsLoading(false);
+
     } catch (error) {
       console.error(error);
+      setIsLoading(false);
+
     }
   };
 
   const deleteUser = async (id) => {
     const token = localStorage.getItem("token");
+    setIsLoading(true);
+
     axios.delete(`http://localhost:8000/api/users/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -68,6 +79,8 @@ const Teachers = () => {
     });
     toast.success("Deleted Successfully", 2000);
     fetchallData();
+    setIsLoading(false);
+
   };
 
   const handleUpdate = async (id, field, value) => {
@@ -84,6 +97,8 @@ const Teachers = () => {
     // setIsUpdateMode(false);
     // setSelectedInfo({});
     try {
+      setIsLoading(true);
+
       const token = localStorage.getItem("token");
       const response = await axios.put(
         `${apiURL}/${id}`,
@@ -107,9 +122,13 @@ const Teachers = () => {
       setAllData(response.data);
       setIsUpdateMode(false);
       setSelectedInfo({});
+      setIsLoading(false);
+
       toast.success("Updated Successfully", 2000);
     } catch (error) {
       console.error(error);
+      setIsLoading(false);
+
       toast.error("Update Failed", 2000);
     }
   };
@@ -341,6 +360,7 @@ const Teachers = () => {
   ];
 
   return (
+    <div>{isLoading ? <Loader/> : ( 
     <Box m="20px">
       {console.log("all data ", alldata)}
       <Header title="Teachers" subtitle="List of Teachers" />
@@ -388,7 +408,7 @@ const Teachers = () => {
 
         <ToastContainer />
       </Box>
-    </Box>
+    </Box>)} </div>
   );
 };
 

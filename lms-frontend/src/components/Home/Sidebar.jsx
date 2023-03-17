@@ -112,7 +112,7 @@ const Sidebar = () => {
             </Typography>
 
             <Item
-              title="Create a User"
+              title="Add a Student"
               to="/createuser"
               icon={<AddOutlinedIcon />}
               selected={selected}

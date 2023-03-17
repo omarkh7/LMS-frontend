@@ -12,6 +12,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { IconButton } from "@mui/material";
 // import SearchIcon from "@mui/icons-material/Search";
 
+import Loader from "../Home/Loader/Loader";
+
 import {
   Delete as DeleteIcon,
   Edit as EditIcon,
@@ -27,6 +29,7 @@ const Sections = () => {
   const [alldata, setAllData] = useState([]);
   const [newClass, setNewClass] = useState({ section_name: "" });
   const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleOpen = () => {
     setIsOpen(true);
@@ -36,6 +39,8 @@ const Sections = () => {
 
   const fetchallData = async () => {
     try {
+      setIsLoading(true);
+
       const token = localStorage.getItem("token");
       const response = await axios.get(apiURL, {
         headers: {
@@ -44,30 +49,41 @@ const Sections = () => {
       });
       console.log(response.data);
       setAllData(response.data);
+      setIsLoading(false);
+
     } catch (error) {
       console.error(error);
+      setIsLoading(false);
+
     }
   };
 
   const addClass = async () => {
     try {
+      setIsLoading(true);
+
       const token = localStorage.getItem("token");
       await axios.post(apiURL, newClass, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      toast.success("Added Successfully", 2000);
       fetchallData();
+      setIsLoading(false);
       setNewClass({ section_name: "" });
+      toast.success("Added Successfully", 2000);
     } catch (error) {
       console.error(error);
+      setIsLoading(false);
       toast.error("Add Failed", 2000);
+     
+
     }
   };
 
   const deleteUser = async (id) => {
     const token = localStorage.getItem("token");
+    setIsLoading(true);
     axios.delete(`http://localhost:8000/api/sections/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -75,6 +91,7 @@ const Sections = () => {
     });
     toast.success("Deleted Successfully", 2000);
     fetchallData();
+    setIsLoading(false);
   };
 
   const handleUpdate = (id, field, value) => {
@@ -85,9 +102,10 @@ const Sections = () => {
       return row;
     });
     setAllData(updatedData);
-    setIsUpdateMode(false);
+    setIsUpdateMode(true);
     setSelectedInfo({});
     try {
+      setIsLoading(true);
       const token = localStorage.getItem("token");
       axios.put(
         `${apiURL}/${id}`,
@@ -98,9 +116,11 @@ const Sections = () => {
           },
         }
       );
+      setIsLoading(false);
       toast.success("Updated Successfully", 2000);
     } catch (error) {
       console.error(error);
+      setIsLoading(false);
       toast.error("Update Failed", 2000);
     }
   };
@@ -193,6 +213,8 @@ const Sections = () => {
   ];
 
   return (
+    <div>
+      {isLoading ? <Loader /> : ( 
     <Box m="20px">
       <Header title="Sections" subtitle="List of Sections" />
       <Box
@@ -276,6 +298,7 @@ const Sections = () => {
         <ToastContainer />
       </Box>
     </Box>
+    )}</div>
   );
 };
 

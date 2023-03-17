@@ -23,7 +23,7 @@ import Loader from './components/Home/Loader/Loader'
 
 
 function App() {
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [theme, colorMode] = useMode();
   const [isSidebar, setIsSidebar] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(
@@ -44,7 +44,8 @@ function App() {
           <main className="content">
             {isLoggedIn === "true" && <Topbar setIsSidebar={setIsSidebar} />}
 
-            { loading ? <Loader /> : <Routes> 
+            { isLoading ? <Loader /> : 
+            <Routes> 
 
         <Route exact path="/*" element={<PagenotFound/>} />
 
