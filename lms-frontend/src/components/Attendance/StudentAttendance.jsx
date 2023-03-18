@@ -2,7 +2,6 @@ import { Box, TextField, Button, Stack, Input } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import Header from "../Header";
-// import InputBase from "@mui/material/InputBase";
 import imgs from "../user.png";
 import axios from "axios";
 import React, { useState, useEffect } from "react";
@@ -11,38 +10,36 @@ import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
 import "react-toastify/dist/ReactToastify.css";
 import RemoveOutlinedIcon from "@mui/icons-material/RemoveOutlined";
 import { IconButton } from "@mui/material";
-// import SearchIcon from "@mui/icons-material/Search";
-import { CircularProgress } from "@mui/material";
 import {
   Delete as DeleteIcon,
   Edit as EditIcon,
   Save as SaveIcon,
 } from "@mui/icons-material";
-
 import { useTheme } from "@mui/material";
 
 const Students = () => {
   const [selectedInfo, setSelectedInfo] = useState({});
   const [isUpdateMode, setIsUpdateMode] = useState(false);
   const [alldata, setAllData] = useState([]);
-  // const [imageFile, setImageFile] = useState(null);
-  const [loading, setLoading] = useState(true);
-
+  const [imageFile, setImageFile] = useState(null);
   const [newData, setNewData] = useState({
-    student_id: "",
-    teacher_id: "",
-    class_section_id: "",
-    status: "",
+    username: "",
+    email: "",
+    firstname: "",
+    lastname: "",
+    role: "",
+    image: "",
+    phonenb: "",
   });
   const [isOpen, setIsOpen] = useState(false);
+
   const handleOpen = () => {
     setIsOpen(true);
   };
 
-  const apiURL = "http://localhost:8000/api/attendances";
+  const apiURL = "http://localhost:8000/api/users";
 
   const fetchallData = async () => {
-    setLoading(true);
     try {
       const token = localStorage.getItem("token");
       const response = await axios.get(apiURL, {
@@ -55,12 +52,11 @@ const Students = () => {
     } catch (error) {
       console.error(error);
     }
-    setLoading(false);
   };
 
-  const deleteUser = async (student_id) => {
+  const deleteUser = async (id) => {
     const token = localStorage.getItem("token");
-    axios.delete(`http://localhost:8000/api/attendances/${student_id}`, {
+    axios.delete(`http://localhost:8000/api/users/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -69,9 +65,9 @@ const Students = () => {
     fetchallData();
   };
 
-  const handleUpdate = async (student_id, field, value) => {
+  const handleUpdate = async (id, field, value) => {
     const updatedData = alldata.map((row) => {
-      if (row.student_id === student_id) {
+      if (row.id === id) {
         console.log("row ", row);
         return { ...row, [field]: value };
       }
@@ -79,21 +75,25 @@ const Students = () => {
     });
 
     console.log("updated data ", updatedData);
-
+    // setAllData(updatedData);
+    // setIsUpdateMode(false);
+    // setSelectedInfo({});
     try {
       const token = localStorage.getItem("token");
       const response = await axios.put(
-        `${apiURL}/${student_id}`,
+        `${apiURL}/${id}`,
         {
-          student_id: selectedInfo.student_id,
-          teacher_id: selectedInfo.teacher_id,
-          class_section_id: selectedInfo.class_section_id,
-          status: selectedInfo.status,
+          username: selectedInfo.username,
+          email: selectedInfo.email,
+          firstname: selectedInfo.firstname,
+          lastname: selectedInfo.lastname,
+          role: selectedInfo.role,
+          image: selectedInfo.image,
+          phonenb: selectedInfo.phonenb,
         },
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
           },
         }
       );
@@ -117,78 +117,160 @@ const Students = () => {
   const colors = tokens(theme.palette.mode);
 
   const columns = [
-    { field: "student_id", headerName: "student_id" },
+    { field: "id", headerName: "ID" },
 
     {
-      field: "teacher_id",
-      headerName: "teacher_id",
+      field: "image",
+      headerName: "Image",
+      flex: 1,
+      cellClassName: "name-column--cell",
+      valueGetter: (params) => params.row.image,
+      renderCell: (params) => {
+        const handleImageChange = (event) => {
+          setSelectedInfo({
+            ...selectedInfo,
+            image: event.target.files[0],
+          });
+        };
+
+        return isUpdateMode && selectedInfo.id === params.row.id ? (
+          <Box display="flex" alignItems="center">
+            <Input
+              type="file"
+              disableUnderline
+              fullWidth
+              onChange={handleImageChange}
+            />
+          </Box>
+        ) : params.row.image ? (
+          <img
+            src={`http://localhost:8000/images/${params.row.image}`}
+            alt={params.row.image}
+            width={50}
+            height={50}
+          />
+        ) : (
+          <RemoveOutlinedIcon />
+        );
+      },
+    },
+    {
+      field: "username",
+      headerName: "UserName",
       flex: 2,
       cellClassName: "name-column--cell",
-      valueGetter: (params) => params.row.teacher_id,
+      valueGetter: (params) => params.row.username,
       renderCell: (params) =>
-        isUpdateMode && selectedInfo.teacher_id === params.row.teacher_id ? (
+        isUpdateMode && selectedInfo.id === params.row.id ? (
           <TextField
             fullWidth
             variant="standard"
-            value={selectedInfo.teacher_id || ""}
+            value={selectedInfo.username || ""}
             onChange={(e) =>
               setSelectedInfo({
                 ...selectedInfo,
-                teacher_id: e.target.value,
+                username: e.target.value,
               })
             }
           />
         ) : (
-          <div>{params.row.teacher_id}</div>
+          <div>{params.row.username}</div>
         ),
     },
 
     {
-      field: "class_section_id",
-      headerName: "class_section_id",
+      field: "firstname",
+      headerName: "First Name",
       flex: 2,
       cellClassName: "name-column--cell",
-      valueGetter: (params) => params.row.class_section_id,
+      valueGetter: (params) => params.row.firstname,
       renderCell: (params) =>
-        isUpdateMode && selectedInfo.class_section_id === params.row.class_section_id ? (
+        isUpdateMode && selectedInfo.id === params.row.id ? (
           <TextField
             fullWidth
             variant="standard"
-            value={selectedInfo.class_section_id || ""}
+            value={selectedInfo.firstname || ""}
             onChange={(e) =>
               setSelectedInfo({
                 ...selectedInfo,
-                class_section_id: e.target.value,
+                firstname: e.target.value,
               })
             }
           />
         ) : (
-          <div>{params.row.class_section_id}</div>
+          <div>{params.row.firstname}</div>
         ),
     },
     {
-      field: "status",
-      headerName: "status",
+      field: "lastname",
+      headerName: "Last Name",
       flex: 2,
       cellClassName: "name-column--cell",
-      valueGetter: (params) => params.row.status,
+      valueGetter: (params) => params.row.lastname,
       renderCell: (params) =>
-        isUpdateMode && selectedInfo.status === params.row.status ? (
+        isUpdateMode && selectedInfo.id === params.row.id ? (
           <TextField
             fullWidth
             variant="standard"
-            value={selectedInfo.status || ""}
+            value={selectedInfo.lastname || ""}
             onChange={(e) =>
               setSelectedInfo({
                 ...selectedInfo,
-                status: e.target.value,
+                lastname: e.target.value,
               })
             }
           />
         ) : (
-          <div>{params.row.status}</div>
+          <div>{params.row.lastname}</div>
         ),
     },
+    {
+      field: "email",
+      headerName: "Email",
+      flex: 2,
+      cellClassName: "name-column--cell",
+      valueGetter: (params) => params.row.email,
+      renderCell: (params) =>
+        isUpdateMode && selectedInfo.id === params.row.id ? (
+          <TextField
+            fullWidth
+            variant="standard"
+            value={selectedInfo.email || ""}
+            onChange={(e) =>
+              setSelectedInfo({
+                ...selectedInfo,
+                email: e.target.value,
+              })
+            }
+          />
+        ) : (
+          <div>{params.row.email}</div>
+        ),
+    },
+    {
+      field: "phonenb",
+      headerName: " Phone Number",
+      flex: 2,
+      cellClassName: "name-column--cell",
+      valueGetter: (params) => params.row.phonenb,
+      renderCell: (params) =>
+        isUpdateMode && selectedInfo.id === params.row.id ? (
+          <TextField
+            fullWidth
+            variant="standard"
+            value={selectedInfo.phonenb || ""}
+            onChange={(e) =>
+              setSelectedInfo({
+                ...selectedInfo,
+                phonenb: e.target.value,
+              })
+            }
+          />
+        ) : (
+          <div>{params.row.phonenb}</div>
+        ),
+    },
+
     {
       field: "edit",
       headerName: "Edit",
@@ -196,21 +278,24 @@ const Students = () => {
       sortable: false,
       disableColumnMenu: true,
       renderCell: (params) =>
-        isUpdateMode && selectedInfo.student_id === params.row.student_id ? (
+        isUpdateMode && selectedInfo.id === params.row.id ? (
           <div>
             <IconButton
               onClick={() => {
                 handleUpdate(
-                  params.row.student_id,
-
-                  "student_id" ||
-                    "teacher_id" ||
-                    "class_section_id" ||
-                    "status" ||
-     selectedInfo.student_id ||
-            selectedInfo.teacher_id ||
-             selectedInfo.class_section_id ||
-           selectedInfo.status,
+                  params.row.id,
+                  "image" ||
+                    "username" ||
+                    "firstname" ||
+                    "lastname" ||
+                    "email" ||
+                    "phonenb",
+                  selectedInfo.image ||
+                    selectedInfo.username ||
+                    selectedInfo.firstname ||
+                    selectedInfo.lastname ||
+                    selectedInfo.email ||
+                    selectedInfo.phonenb
                 );
                 setIsUpdateMode(false);
               }}
@@ -243,7 +328,7 @@ const Students = () => {
       sortable: false,
       disableColumnMenu: true,
       renderCell: (params) => (
-        <IconButton onClick={() => deleteUser(params.row.student_id)}>
+        <IconButton onClick={() => deleteUser(params.row.id)}>
           <DeleteIcon />
         </IconButton>
       ),
@@ -253,7 +338,7 @@ const Students = () => {
   return (
     <Box m="20px">
       {console.log("all data ", alldata)}
-      <Header title="Student" subtitle="List of Students" />
+      <Header title="Attendance " subtitle="Students" />
       <Box
         m="40px 0 0 0"
         height="75vh"
@@ -287,7 +372,7 @@ const Students = () => {
         }}
       >
         <DataGrid
-          rows={alldata}
+          rows={alldata.filter((data) => data.role == 3)}
           columns={columns}
           components={{ Toolbar: GridToolbar }}
           pageSize={10}

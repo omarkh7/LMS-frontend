@@ -12,12 +12,13 @@ import "react-toastify/dist/ReactToastify.css";
 import RemoveOutlinedIcon from "@mui/icons-material/RemoveOutlined";
 import { IconButton } from "@mui/material";
 // import SearchIcon from "@mui/icons-material/Search";
-import { CircularProgress } from "@mui/material";
+
 import {
   Delete as DeleteIcon,
   Edit as EditIcon,
   Save as SaveIcon,
 } from "@mui/icons-material";
+import AddIcon from "@mui/icons-material/Add";
 
 import { useTheme } from "@mui/material";
 
@@ -26,8 +27,6 @@ const Students = () => {
   const [isUpdateMode, setIsUpdateMode] = useState(false);
   const [alldata, setAllData] = useState([]);
   const [imageFile, setImageFile] = useState(null);
-  const [loading, setLoading] = useState(true);
-
   const [newData, setNewData] = useState({
     username: "",
     email: "",
@@ -38,6 +37,7 @@ const Students = () => {
     phonenb: "",
   });
   const [isOpen, setIsOpen] = useState(false);
+
   const handleOpen = () => {
     setIsOpen(true);
   };
@@ -45,7 +45,6 @@ const Students = () => {
   const apiURL = "http://localhost:8000/api/users";
 
   const fetchallData = async () => {
-    setLoading(true);
     try {
       const token = localStorage.getItem("token");
       const response = await axios.get(apiURL, {
@@ -58,7 +57,6 @@ const Students = () => {
     } catch (error) {
       console.error(error);
     }
-    setLoading(false);
   };
 
   const deleteUser = async (id) => {
@@ -82,7 +80,9 @@ const Students = () => {
     });
 
     console.log("updated data ", updatedData);
-
+    // setAllData(updatedData);
+    // setIsUpdateMode(false);
+    // setSelectedInfo({});
     try {
       const token = localStorage.getItem("token");
       const response = await axios.put(
@@ -99,7 +99,6 @@ const Students = () => {
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
           },
         }
       );
@@ -344,7 +343,7 @@ const Students = () => {
   return (
     <Box m="20px">
       {console.log("all data ", alldata)}
-      <Header title="Student" subtitle="List of Students" />
+      <Header title="Students" subtitle="List of Students" />
       <Box
         m="40px 0 0 0"
         height="75vh"
