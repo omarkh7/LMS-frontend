@@ -23,6 +23,7 @@ const Topbar = () => {
         backgroundColor={colors.primary[400]}
         borderRadius="3px"
       >
+ 
       </Box>
       {/* ICONS */}
       <Box display="flex">

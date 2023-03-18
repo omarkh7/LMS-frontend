@@ -11,7 +11,8 @@ import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
 import "react-toastify/dist/ReactToastify.css";
 import { IconButton } from "@mui/material";
 // import SearchIcon from "@mui/icons-material/Search";
-
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 import {
   Delete as DeleteIcon,
   Edit as EditIcon,
@@ -75,13 +76,39 @@ const ClassSection = () => {
 
   const deleteUser = async (id) => {
     const token = localStorage.getItem("token");
-    axios.delete(`http://localhost:8000/api/classsections/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+    
+    confirmAlert({
+      title: 'Confirm Deletion',
+      message: 'Are you sure you want to delete this Class Section?',
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: async () => {
+            try {
+           
+              await axios.delete(`http://localhost:8000/api/classsections/${id}`, {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              });
+              toast.success("Deleted Successfully", 2000);
+              fetchallData();
+          
+            } catch (error) {
+              console.error(error);
+              toast.error("Delete Failed", 2000);
+             
+            }
+          }
+        },
+        {
+          label: 'No',
+          onClick: () => {
+            toast.error("Canceled", 2000);
+          }
+        }
+      ]
     });
-    toast.success("Deleted Successfully", 2000);
-    fetchallData();
   };
 
   const handleUpdate = async (id, field, value) => {

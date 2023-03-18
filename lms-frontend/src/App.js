@@ -23,9 +23,8 @@ import StudentAttendance from "./components/Attendance/StudentAttendance";
 import TeacherAttendance from "./components/Attendance/TeacherAttendance";
 
 
-
-
 function App() {
+  const [loading, setLoading] = useState(false);
   const [theme, colorMode] = useMode();
   const [isSidebar, setIsSidebar] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(
@@ -37,6 +36,7 @@ function App() {
   }, []);
 
   return (
+  
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
@@ -45,7 +45,7 @@ function App() {
           <main className="content">
             {isLoggedIn === "true" && <Topbar setIsSidebar={setIsSidebar} />}
 
-            <Routes>
+           <Routes> 
 
         <Route exact path="/*" element={<PagenotFound/>} />
 
