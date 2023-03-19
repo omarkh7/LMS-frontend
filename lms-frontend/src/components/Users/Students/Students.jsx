@@ -17,7 +17,6 @@ import {
   Edit as EditIcon,
   Save as SaveIcon,
 } from "@mui/icons-material";
-import AddIcon from "@mui/icons-material/Add";
 
 import { useTheme } from "@mui/material";
 
@@ -113,7 +112,7 @@ const Students = () => {
         formData.append("image", imageFile);
       }
       console.log("Form 11", formData.get("image"));
-      const response = await axios.post(`${apiURL}/${id}`, formData, {
+      const response = await axios.post(`http://localhost:8000/api/users/${id}`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
@@ -329,7 +328,7 @@ const Students = () => {
                     selectedInfo.firstname ||
                     selectedInfo.lastname ||
                     selectedInfo.email ||
-                    selectedInfo.phonenb
+                    selectedInfo.phonenb,
                 );
                 setIsUpdateMode(false);
               }}

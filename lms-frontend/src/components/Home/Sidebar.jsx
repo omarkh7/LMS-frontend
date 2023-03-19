@@ -118,6 +118,14 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
+                        
+              <Item
+              title="Add Student Attendance"
+              to="/RecordAttendance"
+              icon={<BarChartOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
   {role === "admin" && (
     <>
             <Item

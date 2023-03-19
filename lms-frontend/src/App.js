@@ -21,6 +21,7 @@ import Register from "./components/Auth/Register";
 import PagenotFound from "./components/Home/404 not Found/PagenotFound";
 import StudentAttendance from "./components/Attendance/StudentAttendance";
 import TeacherAttendance from "./components/Attendance/TeacherAttendance";
+import RecordAttendance from "./components/Users/RecordAttendance";
 
 
 function App() {
@@ -68,6 +69,11 @@ function App() {
                 exact
                 path="/createuser"
                 element={isLoggedIn === "true" ? <CreateUser /> : <Login />}
+              />
+                            <Route
+                exact
+                path="/RecordAttendance"
+                element={isLoggedIn === "true" ? <RecordAttendance /> : <Login />}
               />
               <Route
                 exact
