@@ -15,7 +15,9 @@ import axios from "axios";
 const CreateAttendance = () => {
   const [formData, setFormData] = useState({
     student_id: "",
-  });
+    teacher_id: "", // add a default value for teacher_id
+    class_section_id: "",
+    status: "",  });
   const [userIds, setUserIds] = useState([]);
   const [errors, setErrors] = useState({});
 
@@ -85,6 +87,12 @@ const CreateAttendance = () => {
   useEffect(() => {
     fetchUsers();
   }, []);
+  const [status, setStatus] = useState("");
+
+  const handleChangeStatus = (event) => {
+    setStatus(event.target.value);
+  };
+  
 
   return (
     <Box m="20px">
@@ -111,16 +119,17 @@ const CreateAttendance = () => {
             </FormControl>
           </div>
           <div style={{ marginBottom: 10 }}>
-   <TextField
-     fullWidth
-     name="teacher_id"
-     label="Teacher ID"
-     value={formData.teacher_id}
-     onChange={handleInputChange}
-     required
-     error={Boolean(errors.teacher_id)}
-     helpertext={errors.teacher_id}
-   />
+          <TextField
+  fullWidth
+  name="teacher_id"
+  label="Teacher ID"
+  // defaultValue="1" // set a default value for teacher_id
+  value={formData.teacher_id}
+  onChange={handleInputChange}
+  required
+  error={Boolean(errors.teacher_id)}
+  helpertext={errors.teacher_id}
+/>
  </div>
  <div style={{ marginBottom: 10 }}>
    <TextField
@@ -134,25 +143,33 @@ const CreateAttendance = () => {
      helpertext={errors.class_section_id}
    />
  </div>
- <div style={{ marginBottom: 10 }}>
-  <FormControl fullWidth>
+  {/* <FormControl fullWidth>
     <InputLabel id="status-label">Status</InputLabel>
     <Select
-      labelId="status-label"
-      id="status"
-      name="status"
-      value={formData.status}
-      onChange={handleInputChange}
-      required
-      error={Boolean(errors.status)}
-      helpertext={errors.status}
-    >
-      <MenuItem value={1}>Present</MenuItem>
-      <MenuItem value={2}>Absent</MenuItem>
-      <MenuItem value={3}>Late</MenuItem>
-    </Select>
-  </FormControl>
-</div>
+    name="status"
+    value={formData.status}
+    onChange={handleChangeStatus}
+    required
+    error={Boolean(errors.status)}
+    helpertext={errors.status}
+  >
+    <MenuItem value={1}>Present</MenuItem>
+    <MenuItem value={2}>Absent</MenuItem>
+    <MenuItem value={3}>Late</MenuItem>
+  </Select>
+  </FormControl> */}
+ <div style={{ marginBottom: 10 }}>
+   <TextField
+     fullWidth
+     name="status"
+     label="Status"
+     value={formData.status}
+     onChange={handleInputChange}
+     required
+     error={Boolean(errors.status)}
+     helpertext={errors.status}
+   />
+ </div>
 
           <Button fullWidth variant="contained" color="primary" type="submit">
             Record Attendance

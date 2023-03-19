@@ -20,8 +20,7 @@ import CreateUser from "./components/Users/CreateUser";
 import Register from "./components/Auth/Register";
 import PagenotFound from "./components/Home/404 not Found/PagenotFound";
 import StudentAttendance from "./components/Attendance/StudentAttendance";
-import TeacherAttendance from "./components/Attendance/TeacherAttendance";
-import RecordAttendance from "./components/Users/RecordAttendance";
+import RecordStudentAttendance from "./components/Users/RecordStudentAttendance";
 
 
 function App() {
@@ -73,7 +72,7 @@ function App() {
                             <Route
                 exact
                 path="/RecordAttendance"
-                element={isLoggedIn === "true" ? <RecordAttendance /> : <Login />}
+                element={isLoggedIn === "true" ? <RecordStudentAttendance /> : <Login />}
               />
               <Route
                 exact
@@ -109,11 +108,6 @@ function App() {
                 exact
                 path="/StudentAttendance"
                 element={isLoggedIn === "true" ? <StudentAttendance /> : <Login />}
-              />
-              <Route
-                exact
-                path="/TeacherAttendance"
-                element={isLoggedIn === "true" ? <TeacherAttendance /> : <Login />}
               />
               <Route
                 exact

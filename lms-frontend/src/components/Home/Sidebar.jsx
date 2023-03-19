@@ -213,13 +213,6 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />            
-            <Item
-            title="Teacher Attendance"
-            to="/TeacherAttendance"
-            icon={<BarChartOutlinedIcon />}
-            selected={selected}
-            setSelected={setSelected}
-          />
           </Box>
         </Menu>
       </ProSidebar>
