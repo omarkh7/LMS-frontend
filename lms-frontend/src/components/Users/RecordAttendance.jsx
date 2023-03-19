@@ -135,17 +135,24 @@ const CreateAttendance = () => {
    />
  </div>
  <div style={{ marginBottom: 10 }}>
-   <TextField
-     fullWidth
-     name="status"
-     label="Status"
-     value={formData.status}
-     onChange={handleInputChange}
-     required
-     error={Boolean(errors.status)}
-     helpertext={errors.status}
-   />
- </div>
+  <FormControl fullWidth>
+    <InputLabel id="status-label">Status</InputLabel>
+    <Select
+      labelId="status-label"
+      id="status"
+      name="status"
+      value={formData.status}
+      onChange={handleInputChange}
+      required
+      error={Boolean(errors.status)}
+      helpertext={errors.status}
+    >
+      <MenuItem value={1}>Present</MenuItem>
+      <MenuItem value={2}>Absent</MenuItem>
+      <MenuItem value={3}>Late</MenuItem>
+    </Select>
+  </FormControl>
+</div>
 
           <Button fullWidth variant="contained" color="primary" type="submit">
             Record Attendance
