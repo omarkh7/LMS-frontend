@@ -20,6 +20,7 @@ const CreateAttendance = () => {
     status: "",  });
   const [userIds, setUserIds] = useState([]);
   const [errors, setErrors] = useState({});
+  const [selectedStatus, setSelectedStatus] = useState("");
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -83,15 +84,14 @@ const CreateAttendance = () => {
         toast.error("Failed to fetch user IDs.");
       });
   };
-
+  const handleStatusChange = (event) => {
+    setSelectedStatus(event.target.value);
+    setFormData({ ...formData, status: event.target.value });
+  };
   useEffect(() => {
     fetchUsers();
   }, []);
-  const [status, setStatus] = useState("");
 
-  const handleChangeStatus = (event) => {
-    setStatus(event.target.value);
-  };
   
 
   return (
@@ -143,23 +143,9 @@ const CreateAttendance = () => {
      helpertext={errors.class_section_id}
    />
  </div>
-  {/* <FormControl fullWidth>
-    <InputLabel id="status-label">Status</InputLabel>
-    <Select
-    name="status"
-    value={formData.status}
-    onChange={handleChangeStatus}
-    required
-    error={Boolean(errors.status)}
-    helpertext={errors.status}
-  >
-    <MenuItem value={1}>Present</MenuItem>
-    <MenuItem value={2}>Absent</MenuItem>
-    <MenuItem value={3}>Late</MenuItem>
-  </Select>
-  </FormControl> */}
+
  <div style={{ marginBottom: 10 }}>
-   <TextField
+   {/* <TextField
      fullWidth
      name="status"
      label="Status"
@@ -168,7 +154,22 @@ const CreateAttendance = () => {
      required
      error={Boolean(errors.status)}
      helpertext={errors.status}
-   />
+   /> */}
+    <FormControl fullWidth>
+    <InputLabel id="status-label">Status</InputLabel>
+    <Select
+    name="status"
+    value={formData.status}
+    onChange={handleStatusChange}
+    required
+    error={Boolean(errors.status)}
+    helpertext={errors.status}
+  >
+    <MenuItem value={1}>Present</MenuItem>
+    <MenuItem value={2}>Late</MenuItem>
+    <MenuItem value={3}>Absent</MenuItem>
+  </Select>
+  </FormControl> 
  </div>
 
           <Button fullWidth variant="contained" color="primary" type="submit">
