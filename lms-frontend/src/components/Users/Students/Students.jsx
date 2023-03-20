@@ -2,16 +2,21 @@ import { Box, TextField, Button, Stack, Input } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { tokens } from "../../../theme";
 import Header from "../../Header";
-import imgs from "../../user.png";
 import axios from "axios";
 import React, { useState, useEffect } from "react";
+import { withRouter } from 'react-router-dom';
 import { ToastContainer, toast } from "react-toastify";
 import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
 import "react-toastify/dist/ReactToastify.css";
 import RemoveOutlinedIcon from "@mui/icons-material/RemoveOutlined";
 import { IconButton } from "@mui/material";
 import { confirmAlert } from 'react-confirm-alert';
+import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import { Link } from "react-router-dom";
+import { Typography } from "@mui/material";
+import { MenuItem } from "react-pro-sidebar";
+
 import {
   Delete as DeleteIcon,
   Edit as EditIcon,
@@ -20,11 +25,33 @@ import {
 
 import { useTheme } from "@mui/material";
 
+
+const Item = ({ title, to, icon, selected, setSelected }) => {
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
+  return (
+    <MenuItem
+      active={selected === title}
+      style={{
+        color: colors.grey[100],
+      }}
+      onClick={() => setSelected(title)}
+      icon={icon}
+    >
+      <Typography>{title}</Typography>
+      <Link to={to} />
+    </MenuItem>
+  );
+};
+
 const Students = () => {
   const [selectedInfo, setSelectedInfo] = useState({});
   const [isUpdateMode, setIsUpdateMode] = useState(false);
   const [alldata, setAllData] = useState([]);
   const [imageFile, setImageFile] = useState(null);
+  const [selected, setSelected] = useState("Dashboard");
+
+
   const [newData, setNewData] = useState({
     username: "",
     email: "",
@@ -302,7 +329,6 @@ const Students = () => {
           <div>{params.row.phonenb}</div>
         ),
     },
-
     {
       field: "edit",
       headerName: "Edit",

@@ -22,7 +22,6 @@ import PagenotFound from "./components/Home/404 not Found/PagenotFound";
 import StudentAttendance from "./components/Attendance/StudentAttendance";
 import RecordStudentAttendance from "./components/Users/RecordStudentAttendance";
 
-
 function App() {
   const [loading, setLoading] = useState(false);
   const [theme, colorMode] = useMode();
