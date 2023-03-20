@@ -11,8 +11,11 @@ import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
 import "react-toastify/dist/ReactToastify.css";
 import { IconButton } from "@mui/material";
 // import SearchIcon from "@mui/icons-material/Search";
-import { confirmAlert } from 'react-confirm-alert';
-import 'react-confirm-alert/src/react-confirm-alert.css';
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
+
+
+
 import {
   Delete as DeleteIcon,
   Edit as EditIcon,
@@ -21,6 +24,7 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 
 import { useTheme } from "@mui/material";
+import Loader from "../Home/Loader/Loader";
 
 const Classes = () => {
   const [selectedInfo, setSelectedInfo] = useState({});
@@ -40,7 +44,6 @@ const Classes = () => {
   const apiURL = "http://localhost:8000/api/classes";
 
   const fetchallData = async () => {
-    
     try {
       setIsLoading(true);
       const token = localStorage.getItem("token");
@@ -48,21 +51,17 @@ const Classes = () => {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-
       });
       console.log(response.data);
       setAllData(response.data);
       setIsLoading(false);
-
     } catch (error) {
       console.error(error);
       setIsLoading(false);
     }
-    
   };
 
   const addClass = async () => {
-   
     try {
       setIsLoading(true);
       const token = localStorage.getItem("token");
@@ -78,19 +77,19 @@ const Classes = () => {
     } catch (error) {
       console.error(error);
       toast.error("Add Failed", 2000);
-      setIsLoading(false); }
+      setIsLoading(false);
+    }
   };
-
 
   const deleteUser = async (id) => {
     const token = localStorage.getItem("token");
-    
+
     confirmAlert({
-      title: 'Confirm Deletion',
-      message: 'Are you sure you want to delete this Class?',
+      title: "Confirm Deletion",
+      message: "Are you sure you want to delete this Class?",
       buttons: [
         {
-          label: 'Yes',
+          label: "Yes",
           onClick: async () => {
             try {
               setIsLoading(true);
@@ -107,15 +106,15 @@ const Classes = () => {
               toast.error("Delete Failed", 2000);
               setIsLoading(false);
             }
-          }
+          },
         },
         {
-          label: 'No',
+          label: "No",
           onClick: () => {
             toast.error("Canceled", 2000);
-          }
-        }
-      ]
+          },
+        },
+      ],
     });
   };
 
@@ -143,18 +142,15 @@ const Classes = () => {
       );
       setIsLoading(false);
       toast.success("Updated Successfully", 2000);
-     
     } catch (error) {
       console.error(error);
       toast.error("Update Failed", 2000);
-    }
-    finally {
+    } finally {
       setIsLoading(false); // Set isLoading back to false when request is completed
     }
   };
 
   useEffect(() => {
- 
     fetchallData();
   }, []);
 
@@ -243,95 +239,94 @@ const Classes = () => {
   ];
 
   return (
-    <div>
-    <Box m="20px">
-      <Header title="CLASSES" subtitle="List of Classes" />
-      <Box
-        m="40px 0 0 0"
-        height="75vh"
-        sx={{
-          "& .MuiDataGrid-root": {
-            border: "none",
-          },
-          "& .MuiDataGrid-cell": {
-            borderBottom: "none",
-          },
-          "& .name-column--cell": {
-            color: colors.greenAccent[300],
-          },
-          "& .MuiDataGrid-columnHeaders": {
-            backgroundColor: colors.blueAccent[700],
-            borderBottom: "none",
-          },
-          "& .MuiDataGrid-virtualScroller": {
-            backgroundColor: colors.primary[400],
-          },
-          "& .MuiDataGrid-footerContainer": {
-            borderTop: "none",
-            backgroundColor: colors.blueAccent[700],
-          },
-          "& .MuiCheckbox-root": {
-            color: `${colors.greenAccent[200]} !important`,
-          },
-          "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-            color: `${colors.grey[100]} !important`,
-          },
-        }}
-      >
-        <Stack direction="column">
-        
-          <DataGrid
-            rows={alldata}
-            columns={columns}
-            components={{ Toolbar: GridToolbar }}
-            pageSize={10}
-            // rowsPerPageOptions={[5, 10, 25]}
-            autoHeight
-            disableSelectionOnClick
-          />
-          {role === "admin" && (
+    <div>{isLoading ?<Loader />:
+    
+      <Box m="20px">
+        <Header title="CLASSES" subtitle="List of Classes" />
+        <Box
+          m="40px 0 0 0"
+          height="75vh"
+          sx={{
+            "& .MuiDataGrid-root": {
+              border: "none",
+            },
+            "& .MuiDataGrid-cell": {
+              borderBottom: "none",
+            },
+            "& .name-column--cell": {
+              color: colors.greenAccent[300],
+            },
+            "& .MuiDataGrid-columnHeaders": {
+              backgroundColor: colors.blueAccent[700],
+              borderBottom: "none",
+            },
+            "& .MuiDataGrid-virtualScroller": {
+              backgroundColor: colors.primary[400],
+            },
+            "& .MuiDataGrid-footerContainer": {
+              borderTop: "none",
+              backgroundColor: colors.blueAccent[700],
+            },
+            "& .MuiCheckbox-root": {
+              color: `${colors.greenAccent[200]} !important`,
+            },
+            "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+              color: `${colors.grey[100]} !important`,
+            },
+          }}
+        >
+          <Stack direction="column">
+            <DataGrid
+              rows={alldata}
+              columns={columns}
+              components={{ Toolbar: GridToolbar }}
+              pageSize={10}
+              // rowsPerPageOptions={[5, 10, 25]}
+              autoHeight
+              disableSelectionOnClick
+            />
+            {role === "admin" && (
+              <Button
+                variant="contained"
+                color="neutral"
+                startIcon={<AddIcon />}
+                onClick={handleOpen}
+              >
+                Add new Class
+              </Button>
+            )}
+          </Stack>
+
+          <Box mt={2} display={isOpen ? "block" : "none"}>
+            <TextField
+              fullWidth
+              label="New Class Name"
+              variant="outlined"
+              value={newClass.class_name}
+              onChange={(e) =>
+                setNewClass({ ...newClass, class_name: e.target.value })
+              }
+            />
+            <Box sx={{ m: 1 }} />
+            <Button variant="contained" color="neutral" onClick={addClass}>
+              Add
+            </Button>{" "}
             <Button
               variant="contained"
               color="neutral"
-              startIcon={<AddIcon />}
-              onClick={handleOpen}
+              onClick={() => setIsOpen(false)}
             >
-              Add new Class
+              Cancel
             </Button>
-          )}
-        </Stack>
+          </Box>
+          <Box sx={{ p: 3 }} />
 
-        <Box mt={2} display={isOpen ? "block" : "none"}>
-       <TextField
-            fullWidth
-            label="New Class Name"
-            variant="outlined"
-            value={newClass.class_name}
-            onChange={(e) =>
-              setNewClass({ ...newClass, class_name: e.target.value })
-            }
-          />
-          <Box sx={{ m: 1 }} />
-          <Button variant="contained" color="neutral" onClick={addClass}>
-            Add
-          </Button>{" "}
-          <Button
-            variant="contained"
-            color="neutral"
-            onClick={() => setIsOpen(false)}
-          >
-            Cancel
-          </Button>
+          <ToastContainer />
         </Box>
-        <Box sx={{ p: 3 }} />
-
-        <ToastContainer />
       </Box>
-    </Box>
-
+      }
     </div>
   );
-  
 };
 
 export default Classes;

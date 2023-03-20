@@ -1,8 +1,7 @@
-import { Box, TextField, Button, Stack } from "@mui/material";
+import { Box, TextField, Button, Stack, Select, MenuItem } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import Header from "../Header";
-// import InputBase from "@mui/material/InputBase";
 
 import axios from "axios";
 import React, { useState, useEffect } from "react";
@@ -10,9 +9,8 @@ import { ToastContainer, toast } from "react-toastify";
 import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
 import "react-toastify/dist/ReactToastify.css";
 import { IconButton } from "@mui/material";
-// import SearchIcon from "@mui/icons-material/Search";
-import { confirmAlert } from 'react-confirm-alert';
-import 'react-confirm-alert/src/react-confirm-alert.css';
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
 import {
   Delete as DeleteIcon,
   Edit as EditIcon,
@@ -25,10 +23,14 @@ import { useTheme } from "@mui/material";
 const ClassSection = () => {
   const [selectedInfo, setSelectedInfo] = useState({});
   const [isUpdateMode, setIsUpdateMode] = useState(false);
-  const [alldata, setAllData] = useState([]);
+  const [allclassesdata, setAllClassesData] = useState([]);
+  const [allsectionsdata, setAllSectionsData] = useState([]);
+  const [alljoindata, setAllJoinData] = useState([]);
   const [newData, setNewData] = useState({
     class_id: "",
     section_id: "",
+    class_name: "",
+    section_name: "",
   });
   const [isOpen, setIsOpen] = useState(false);
 
@@ -36,28 +38,68 @@ const ClassSection = () => {
     setIsOpen(true);
   };
 
-  const apiURL = "http://localhost:8000/api/classsections";
+  const apiURLJoin = "http://localhost:8000/api/join";
 
-  const fetchallData = async () => {
+  const apiClassesUrl = "http://localhost:8000/api/classes";
+  const apiSectionsUrl = "http://localhost:8000/api/sections";
+
+  useEffect(() => {
+    fetchallDataJoin();
+    fetchallDataClasses();
+    fetchallDataSections();
+  }, [isUpdateMode]);
+
+  const fetchallDataSections = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get(apiURL, {
+      const response = await axios.get(apiSectionsUrl, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log("fetch data ",response.data);
-      setAllData(response.data);
-
+      console.log("fetch Sections data ", response.data);
+      setAllSectionsData(response.data);
     } catch (error) {
       console.error(error);
     }
   };
+
+  const fetchallDataClasses = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(apiClassesUrl, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log("fetch Classes data ", response.data);
+      setAllClassesData(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const fetchallDataJoin = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(apiURLJoin, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log("fetch Join data ", response.data);
+      setAllJoinData(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const addClass = async () => {
     try {
       const token = localStorage.getItem("token");
+      console.log("batikh data", newData);
       await axios.post(
-        apiURL,
+        `http://localhost:8000/api/classsections/`,
         { class_id: newData.class_id, section_id: newData.section_id },
         {
           headers: {
@@ -66,7 +108,7 @@ const ClassSection = () => {
         }
       );
       toast.success("Added Successfully", { autoClose: 2000 });
-      fetchallData();
+      fetchallDataJoin();
       setNewData({ class_id: "", section_id: "" });
     } catch (error) {
       console.error(error);
@@ -76,58 +118,57 @@ const ClassSection = () => {
 
   const deleteUser = async (id) => {
     const token = localStorage.getItem("token");
-    
+
     confirmAlert({
-      title: 'Confirm Deletion',
-      message: 'Are you sure you want to delete this Class Section?',
+      title: "Confirm Deletion",
+      message: "Are you sure you want to delete this Class Section?",
       buttons: [
         {
-          label: 'Yes',
+          label: "Yes",
           onClick: async () => {
             try {
-           
-              await axios.delete(`http://localhost:8000/api/classsections/${id}`, {
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                },
-              });
+              console.log(id);
+              await axios.delete(
+                `http://localhost:8000/api/classsections/${id}`,
+                {
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                  },
+                }
+              );
               toast.success("Deleted Successfully", 2000);
-              fetchallData();
-          
+              fetchallDataJoin();
             } catch (error) {
               console.error(error);
               toast.error("Delete Failed", 2000);
-             
             }
-          }
+          },
         },
         {
-          label: 'No',
+          label: "No",
           onClick: () => {
             toast.error("Canceled", 2000);
-          }
-        }
-      ]
+          },
+        },
+      ],
     });
   };
 
   const handleUpdate = async (id, field, value) => {
-    const updatedData = alldata.map((row) => {
+    const updatedData = alljoindata.map((row) => {
       if (row.id === id) {
-        console.log("row ",row)
+        console.log("row ", row);
         return { ...row, [field]: value };
       }
       return row;
     });
 
-    console.log("updated data ",updatedData)
-    // setAllData(updatedData);
-    // setIsUpdateMode(false);
-    // setSelectedInfo({});
+    console.log("updated data ", updatedData);
+
     try {
       const token = localStorage.getItem("token");
       const response = await axios.put(
-        `${apiURL}/${id}`,
+        `http://localhost:8000/api/classsections/${id}`,
         {
           class_id: selectedInfo.class_id,
           section_id: selectedInfo.section_id,
@@ -139,8 +180,8 @@ const ClassSection = () => {
         }
       );
 
-      console.log("Updated Successfully ",response);
-      setAllData(response.data);
+      console.log("Updated Successfully ", response);
+      setAllJoinData(response.data);
       setIsUpdateMode(false);
       setSelectedInfo({});
       toast.success("Updated Successfully", 2000);
@@ -150,10 +191,6 @@ const ClassSection = () => {
     }
   };
 
-  useEffect(() => {
-    fetchallData();
-  }, []);
-
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
@@ -162,8 +199,8 @@ const ClassSection = () => {
 
     {
       field: "classid",
-      headerName: "Class ID",
-      flex: 3,
+      headerName: "Class Id",
+      flex: 1,
       cellClassName: "name-column--cell",
       valueGetter: (params) => params.row.class_id,
       renderCell: (params) =>
@@ -183,10 +220,34 @@ const ClassSection = () => {
           <div>{params.row.class_id}</div>
         ),
     },
+
+    {
+      field: "classname",
+      headerName: "Class Name",
+      flex: 3,
+      cellClassName: "name-column--cell",
+      valueGetter: (params) => params.row.class_name,
+      renderCell: (params) =>
+        isUpdateMode === params.row.id ? (
+          <TextField
+            fullWidth
+            variant="standard"
+            value={selectedInfo.class_name || ""}
+            onChange={(e) =>
+              setSelectedInfo({
+                ...selectedInfo,
+                class_name: e.target.value,
+              })
+            }
+          />
+        ) : (
+          <div>{params.row.class_name}</div>
+        ),
+    },
     {
       field: "sectionid",
-      headerName: "Section ID",
-      flex: 6,
+      headerName: "Section Id",
+      flex: 1,
       cellClassName: "name-column--cell",
       valueGetter: (params) => params.row.section_id,
       renderCell: (params) =>
@@ -206,6 +267,31 @@ const ClassSection = () => {
           <div>{params.row.section_id}</div>
         ),
     },
+
+    {
+      field: "sectionname",
+      headerName: "Section Name",
+      flex: 3,
+      cellClassName: "name-column--cell",
+      valueGetter: (params) => params.row.section_name,
+      renderCell: (params) =>
+        isUpdateMode === params.row.id ? (
+          <TextField
+            fullWidth
+            variant="standard"
+            value={selectedInfo.section_name || ""}
+            onChange={(e) =>
+              setSelectedInfo({
+                ...selectedInfo,
+                section_name: e.target.value,
+              })
+            }
+          />
+        ) : (
+          <div>{params.row.section_name}</div>
+        ),
+    },
+
     {
       field: "edit",
       headerName: "Edit",
@@ -262,8 +348,7 @@ const ClassSection = () => {
 
   return (
     <Box m="20px">
-      {      console.log("all data ",alldata)
-}
+      {console.log("all data ", alljoindata)}
       <Header title="CLASS SECTION" subtitle="List of Class Section" />
       <Box
         m="40px 0 0 0"
@@ -299,7 +384,7 @@ const ClassSection = () => {
       >
         <Stack direction="column">
           <DataGrid
-            rows={alldata}
+            rows={alljoindata}
             columns={columns}
             components={{ Toolbar: GridToolbar }}
             pageSize={10}
@@ -318,25 +403,36 @@ const ClassSection = () => {
         </Stack>
 
         <Box mt={2} display={isOpen ? "block" : "none"}>
-          <TextField
-            fullWidth
-            variant="outlined"
-            label="Class ID"
-            value={newData.class_id}
-            onChange={(e) =>
-              setNewData({ ...newData, class_id: e.target.value })
-            }
-          />
-          <Box sx={{ m: 1 }} />
-          <TextField
-            fullWidth
-            variant="outlined"
-            label="Section ID"
-            value={newData.section_id}
-            onChange={(e) =>
-              setNewData({ ...newData, section_id: e.target.value })
-            }
-          />
+          <Select
+            label="Class"
+            id="class_id"
+            value={newData.class_id || 1}
+            onChange={(e) => {
+              console.log(e.target.value);
+              setNewData({ ...newData, class_id: e.target.value });
+            }}
+          >
+            {allclassesdata.map((row) => (
+              <MenuItem key={row.id} value={row.id}>
+                {row.class_name}
+              </MenuItem>
+            ))}
+          </Select>
+          <Select
+            label="Section"
+            id="section_id"
+            value={newData.section_id || 1}
+            onChange={(e) => {
+              console.log(e.target.value);
+              setNewData({ ...newData, section_id: e.target.value });
+            }}
+          >
+            {allsectionsdata.map((row) => (
+              <MenuItem key={row.id} value={row.id}>
+                {row.section_name}
+              </MenuItem>
+            ))}
+          </Select>
           <Box sx={{ m: 1 }} />
           <Button variant="contained" color="neutral" onClick={addClass}>
             Add
@@ -358,4 +454,3 @@ const ClassSection = () => {
 };
 
 export default ClassSection;
-
