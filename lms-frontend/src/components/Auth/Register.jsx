@@ -41,6 +41,10 @@ const Register = () => {
 
   const register = (event) => {
     event.preventDefault();
+    if (formData.password !== formData.password_confirmation) {
+      toast.error("Password confirmation error");
+      return;
+    }
     const data = new FormData();
     data.append("name", formData.name);
     data.append("email", formData.email);

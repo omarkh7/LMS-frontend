@@ -52,7 +52,7 @@ function App() {
                 exact
                 path="/login"
                 element={isLoggedIn === "true" ? <Home /> : <Login />}
-              /> 
+              />
               <Route
                 exact
                 path="/register"
