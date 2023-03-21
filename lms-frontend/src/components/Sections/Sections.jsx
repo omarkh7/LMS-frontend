@@ -13,6 +13,7 @@ import { IconButton } from "@mui/material";
 // import SearchIcon from "@mui/icons-material/Search";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
+import Loader from "../Home/Loader/Loader";
 
 import {
   Delete as DeleteIcon,
@@ -29,6 +30,7 @@ const Sections = () => {
   const [alldata, setAllData] = useState([]);
   const [newClass, setNewClass] = useState({ section_name: "" });
   const [isOpen, setIsOpen] = useState(false);
+  // const [isLoading, setIsLoading ]=
 
   const handleOpen = () => {
     setIsOpen(true);

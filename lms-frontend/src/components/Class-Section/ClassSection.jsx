@@ -11,6 +11,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { IconButton } from "@mui/material";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
+import Loader from "../Home/Loader/Loader";
+
 import {
   Delete as DeleteIcon,
   Edit as EditIcon,
@@ -26,6 +28,7 @@ const ClassSection = () => {
   const [allclassesdata, setAllClassesData] = useState([]);
   const [allsectionsdata, setAllSectionsData] = useState([]);
   const [alljoindata, setAllJoinData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [newData, setNewData] = useState({
     class_id: "",
     section_id: "",
@@ -51,6 +54,8 @@ const ClassSection = () => {
 
   const fetchallDataSections = async () => {
     try {
+      // setIsLoading(true);
+
       const token = localStorage.getItem("token");
       const response = await axios.get(apiSectionsUrl, {
         headers: {
@@ -59,13 +64,19 @@ const ClassSection = () => {
       });
       console.log("fetch Sections data ", response.data);
       setAllSectionsData(response.data);
+      // setIsLoading(false);
+
     } catch (error) {
       console.error(error);
+      // setIsLoading(false);
+
     }
   };
 
   const fetchallDataClasses = async () => {
     try {
+      // setIsLoading(true);
+
       const token = localStorage.getItem("token");
       const response = await axios.get(apiClassesUrl, {
         headers: {
@@ -74,13 +85,19 @@ const ClassSection = () => {
       });
       console.log("fetch Classes data ", response.data);
       setAllClassesData(response.data);
+      // setIsLoading(false);
+
     } catch (error) {
       console.error(error);
+      // setIsLoading(false);
+
     }
   };
 
   const fetchallDataJoin = async () => {
     try {
+      // setIsLoading(true);
+
       const token = localStorage.getItem("token");
       const response = await axios.get(apiURLJoin, {
         headers: {
@@ -89,13 +106,19 @@ const ClassSection = () => {
       });
       console.log("fetch Join data ", response.data);
       setAllJoinData(response.data);
+      // setIsLoading(false);
+
     } catch (error) {
       console.error(error);
+      // setIsLoading(false);
+
     }
   };
 
   const addClass = async () => {
     try {
+      // setIsLoading(true);
+
       const token = localStorage.getItem("token");
       console.log("batikh data", newData);
       await axios.post(
@@ -107,12 +130,17 @@ const ClassSection = () => {
           },
         }
       );
-      toast.success("Added Successfully", { autoClose: 2000 });
+      // setIsLoading(false);
       fetchallDataJoin();
+      toast.success("Added Successfully", { autoClose: 2000 });
       setNewData({ class_id: "", section_id: "" });
+      
+
     } catch (error) {
       console.error(error);
+      // setIsLoading(false);
       toast.error("Add Failed", { autoClose: 2000 });
+
     }
   };
 
@@ -127,6 +155,7 @@ const ClassSection = () => {
           label: "Yes",
           onClick: async () => {
             try {
+              setIsLoading(true);
               console.log(id);
               await axios.delete(
                 `http://localhost:8000/api/classsections/${id}`,
@@ -138,9 +167,11 @@ const ClassSection = () => {
               );
               toast.success("Deleted Successfully", 2000);
               fetchallDataJoin();
+              setIsLoading(false);
             } catch (error) {
               console.error(error);
               toast.error("Delete Failed", 2000);
+              setIsLoading(false);
             }
           },
         },
@@ -148,6 +179,7 @@ const ClassSection = () => {
           label: "No",
           onClick: () => {
             toast.error("Canceled", 2000);
+
           },
         },
       ],
@@ -166,6 +198,7 @@ const ClassSection = () => {
     console.log("updated data ", updatedData);
 
     try {
+      setIsLoading(true);
       const token = localStorage.getItem("token");
       const response = await axios.put(
         `http://localhost:8000/api/classsections/${id}`,
@@ -184,9 +217,13 @@ const ClassSection = () => {
       setAllJoinData(response.data);
       setIsUpdateMode(false);
       setSelectedInfo({});
+      setIsLoading(false);
+
       toast.success("Updated Successfully", 2000);
+
     } catch (error) {
       console.error(error);
+      setIsLoading(false);
       toast.error("Update Failed", 2000);
     }
   };
@@ -347,6 +384,8 @@ const ClassSection = () => {
   ];
 
   return (
+    <div>
+    {isLoading ? <Loader /> : (
     <Box m="20px">
       {console.log("all data ", alljoindata)}
       <Header title="CLASS SECTION" subtitle="List of Class Section" />
@@ -450,7 +489,7 @@ const ClassSection = () => {
         <ToastContainer />
       </Box>
     </Box>
-  );
+  ) }</div>);
 };
 
 export default ClassSection;

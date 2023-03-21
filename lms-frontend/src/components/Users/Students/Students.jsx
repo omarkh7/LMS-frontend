@@ -4,19 +4,18 @@ import { tokens } from "../../../theme";
 import Header from "../../Header";
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-import { withRouter } from 'react-router-dom';
+import { withRouter } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
 import "react-toastify/dist/ReactToastify.css";
 import RemoveOutlinedIcon from "@mui/icons-material/RemoveOutlined";
 import { IconButton } from "@mui/material";
-import { confirmAlert } from 'react-confirm-alert';
-import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
-import 'react-confirm-alert/src/react-confirm-alert.css';
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
 import { Link } from "react-router-dom";
 import { Typography } from "@mui/material";
 import { MenuItem } from "react-pro-sidebar";
-
+import Loader from "../../Home/Loader/Loader";
 import {
   Delete as DeleteIcon,
   Edit as EditIcon,
@@ -24,7 +23,6 @@ import {
 } from "@mui/icons-material";
 
 import { useTheme } from "@mui/material";
-
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -50,7 +48,7 @@ const Students = () => {
   const [alldata, setAllData] = useState([]);
   const [imageFile, setImageFile] = useState(null);
   const [selected, setSelected] = useState("Dashboard");
-
+  const [isLoading, setIsLoading] = useState(false);
 
   const [newData, setNewData] = useState({
     username: "",
@@ -60,6 +58,13 @@ const Students = () => {
     role: "",
     image: "",
     phonenb: "",
+    // class_section: [
+    //   {
+    //     pivot: {
+    //       class_section_id: '',
+    //     },
+    //   },
+    // ],
   });
   const [isOpen, setIsOpen] = useState(false);
 
@@ -71,6 +76,8 @@ const Students = () => {
 
   const fetchallData = async () => {
     try {
+      // setIsLoading(true);
+
       const token = localStorage.getItem("token");
       const response = await axios.get(apiURL, {
         headers: {
@@ -79,39 +86,52 @@ const Students = () => {
       });
       console.log("fetch data ", response.data);
       setAllData(response.data);
+      // setIsLoading(false);
     } catch (error) {
       console.error(error);
+      // setIsLoading(false);
     }
   };
 
   const deleteUser = async (id) => {
     const token = localStorage.getItem("token");
-  
+
     confirmAlert({
-      title: 'Confirm Deletion',
-      message: 'Are you sure you want to delete this Student?',
+      title: "Confirm Deletion",
+      message: "Are you sure you want to delete this Student?",
       buttons: [
         {
-          label: 'Yes',
+          label: "Yes",
           onClick: async () => {
-            await axios.delete(`http://localhost:8000/api/users/${id}`, {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            });
-            toast.success("Deleted Successfully", 2000);
-            fetchallData();
-          }
+            try {
+              setIsLoading(true);
+
+              await axios.delete(`http://localhost:8000/api/users/${id}`, {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              });
+              toast.success("Deleted Successfully", 2000);
+              fetchallData();
+              setIsLoading(false);
+            } catch (error) {
+              console.error(error);
+              toast.error("Delete Failed", 2000);
+              setIsLoading(false);
+            }
+          },
         },
         {
-          label: 'No',
+          label: "No",
           onClick: () => {
             toast.error("Canceled", 2000);
-          }
-        }
-      ]
+          },
+        },
+      ],
     });
   };
+
+
   const handleUpdate = async (e, id, field, value) => {
     e.preventDefault();
 
@@ -139,7 +159,7 @@ const Students = () => {
         formData.append("image", imageFile);
       }
       console.log("Form 11", formData.get("image"));
-      const response = await axios.post(`http://localhost:8000/api/users/${id}`, formData, {
+      const response = await axios.post(`${apiURL}/${id}`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
@@ -286,7 +306,7 @@ const Students = () => {
     {
       field: "email",
       headerName: "Email",
-      flex: 2,
+      flex: 3,
       cellClassName: "name-column--cell",
       valueGetter: (params) => params.row.email,
       renderCell: (params) =>
@@ -329,6 +349,81 @@ const Students = () => {
           <div>{params.row.phonenb}</div>
         ),
     },
+
+
+
+    {
+      field: "class_section",
+      headerName: "Class Section",
+      flex: 2,
+      cellClassName: "name-column--cell",
+      valueGetter: (params) =>
+        params.row.class_section.length > 0 && params.row.class_section[0].pivot
+          ? params.row.class_section[0].pivot.class_section_id
+          : "",
+      renderCell: (params) => (
+        <div>
+          {params.row.class_section.length > 0 &&
+          params.row.class_section[0].pivot
+            ? params.row.class_section[0].pivot.class_section_id
+            : ""}
+        </div>
+      ),
+    },
+    
+    
+
+    // {
+    //   field: "edit",
+    //   headerName: "Edit",
+    //   flex: 1,
+    //   sortable: false,
+    //   disableColumnMenu: true,
+    //   renderCell: (params) =>
+    //     isUpdateMode && selectedInfo.id === params.row.id ? (
+    //       <div>
+    //         <IconButton
+    //           onClick={(e) => {
+    //             handleUpdate(
+    //               e,
+    //               params.row.id,
+    //               "image" ||
+    //                 "username" ||
+    //                 "firstname" ||
+    //                 "lastname" ||
+    //                 "email" ||
+    //                 "phonenb" ||
+    //                 "class_section",
+    //               selectedInfo.image ||
+    //                 selectedInfo.username ||
+    //                 selectedInfo.firstname ||
+    //                 selectedInfo.lastname ||
+    //                 selectedInfo.email ||
+    //                 selectedInfo.phonenb ,
+    //             );
+    //             setIsUpdateMode(false);
+    //           }}
+    //         >
+    //           <SaveIcon />
+    //         </IconButton>
+    //         <IconButton
+    //           variant="contained"
+    //           onClick={() => setIsUpdateMode(false)}
+    //         >
+    //           <ClearOutlinedIcon />
+    //         </IconButton>
+    //       </div>
+    //     ) : (
+    //       <IconButton
+    //         onClick={() => {
+    //           setSelectedInfo(params.row);
+    //           setIsUpdateMode(true);
+    //         }}
+    //       >
+    //         <EditIcon />
+    //       </IconButton>
+    //     ),
+    // },
     {
       field: "edit",
       headerName: "Edit",
@@ -354,7 +449,7 @@ const Students = () => {
                     selectedInfo.firstname ||
                     selectedInfo.lastname ||
                     selectedInfo.email ||
-                    selectedInfo.phonenb,
+                    selectedInfo.phonenb
                 );
                 setIsUpdateMode(false);
               }}
@@ -379,6 +474,7 @@ const Students = () => {
           </IconButton>
         ),
     },
+    
 
     {
       field: "delete",
@@ -395,54 +491,60 @@ const Students = () => {
   ];
 
   return (
-    <Box m="20px">
-      {console.log("all data ", alldata)}
-      <Header title="Students" subtitle="List of Students" />
-      <Box
-        m="40px 0 0 0"
-        height="75vh"
-        sx={{
-          "& .MuiDataGrid-root": {
-            border: "none",
-          },
-          "& .MuiDataGrid-cell": {
-            borderBottom: "none",
-          },
-          "& .name-column--cell": {
-            color: colors.greenAccent[300],
-          },
-          "& .MuiDataGrid-columnHeaders": {
-            backgroundColor: colors.blueAccent[700],
-            borderBottom: "none",
-          },
-          "& .MuiDataGrid-virtualScroller": {
-            backgroundColor: colors.primary[400],
-          },
-          "& .MuiDataGrid-footerContainer": {
-            borderTop: "none",
-            backgroundColor: colors.blueAccent[700],
-          },
-          "& .MuiCheckbox-root": {
-            color: `${colors.greenAccent[200]} !important`,
-          },
-          "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-            color: `${colors.grey[100]} !important`,
-          },
-        }}
-      >
-        <DataGrid
-          rows={alldata.filter((data) => data.role == 3)}
-          columns={columns}
-          components={{ Toolbar: GridToolbar }}
-          pageSize={10}
-          // rowsPerPageOptions={[5, 10, 25]}
-          autoHeight
-          disableSelectionOnClick
-        />
+    <div>
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <Box m="20px">
+          {console.log("all data ", alldata)}
+          <Header title="Students" subtitle="List of Students" />
+          <Box
+            m="40px 0 0 0"
+            height="75vh"
+            sx={{
+              "& .MuiDataGrid-root": {
+                border: "none",
+              },
+              "& .MuiDataGrid-cell": {
+                borderBottom: "none",
+              },
+              "& .name-column--cell": {
+                color: colors.greenAccent[300],
+              },
+              "& .MuiDataGrid-columnHeaders": {
+                backgroundColor: colors.blueAccent[700],
+                borderBottom: "none",
+              },
+              "& .MuiDataGrid-virtualScroller": {
+                backgroundColor: colors.primary[400],
+              },
+              "& .MuiDataGrid-footerContainer": {
+                borderTop: "none",
+                backgroundColor: colors.blueAccent[700],
+              },
+              "& .MuiCheckbox-root": {
+                color: `${colors.greenAccent[200]} !important`,
+              },
+              "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+                color: `${colors.grey[100]} !important`,
+              },
+            }}
+          >
+            <DataGrid
+              rows={alldata.filter((data) => data.role == 3)}
+              columns={columns}
+              components={{ Toolbar: GridToolbar }}
+              pageSize={10}
+              // rowsPerPageOptions={[5, 10, 25]}
+              autoHeight
+              disableSelectionOnClick
+            />
 
-        <ToastContainer />
-      </Box>
-    </Box>
+            <ToastContainer />
+          </Box>
+        </Box>
+      )}
+    </div>
   );
 };
 

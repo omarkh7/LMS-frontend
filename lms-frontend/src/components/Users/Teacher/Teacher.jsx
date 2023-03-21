@@ -17,7 +17,7 @@ import {
   Edit as EditIcon,
   Save as SaveIcon,
 } from "@mui/icons-material";
-
+import Loader from "../../Home/Loader/Loader";
 import { useTheme } from "@mui/material";
 
 const Teachers = () => {
@@ -25,6 +25,8 @@ const Teachers = () => {
   const [isUpdateMode, setIsUpdateMode] = useState(false);
   const [alldata, setAllData] = useState([]);
   const [imageFile, setImageFile] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
   const [newData, setNewData] = useState({
     username: "",
     email: "",
@@ -44,6 +46,8 @@ const Teachers = () => {
 
   const fetchallData = async () => {
     try {
+      // setIsLoading(true);
+
       const token = localStorage.getItem("token");
       const response = await axios.get(apiURL, {
         headers: {
@@ -52,8 +56,12 @@ const Teachers = () => {
       });
       console.log("fetch data ", response.data);
       setAllData(response.data);
+      // setIsLoading(false);
+
     } catch (error) {
       console.error(error);
+      // setIsLoading(false);
+
     }
   };
 
@@ -67,6 +75,8 @@ const Teachers = () => {
         {
           label: 'Yes',
           onClick: async () => {
+            try {
+              setIsLoading(true);
             await axios.delete(`http://localhost:8000/api/users/${id}`, {
               headers: {
                 Authorization: `Bearer ${token}`,
@@ -74,8 +84,16 @@ const Teachers = () => {
             });
             toast.success("Deleted Successfully", 2000);
             fetchallData();
+            setIsLoading(false);
+
+          }
+          catch (error) {
+            console.error(error);
+            toast.error("Delete Failed", 2000);
+            setIsLoading(false);
           }
         },
+      },
         {
           label: 'No',
           onClick: () => {
@@ -370,6 +388,8 @@ const Teachers = () => {
   ];
 
   return (
+    <div>{isLoading ?<Loader />:
+
     <Box m="20px">
       {console.log("all data ", alldata)}
       <Header title="Teachers" subtitle="List of Teachers" />
@@ -418,6 +438,8 @@ const Teachers = () => {
         <ToastContainer />
       </Box>
     </Box>
+        }
+        </div>
   );
 };
 

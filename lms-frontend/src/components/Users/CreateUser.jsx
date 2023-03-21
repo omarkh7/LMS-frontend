@@ -1,4 +1,4 @@
-import React, { useState , useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Button,
@@ -7,7 +7,6 @@ import {
   FormControl,
   Select,
   MenuItem,
-
 } from "@mui/material";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -25,6 +24,7 @@ const CreateUser = () => {
     role: "",
     image: null,
     phonenb: null,
+    class_section_id: null,
   });
 
   const userRoles = [
@@ -35,9 +35,7 @@ const CreateUser = () => {
 
   const isAdmin = localStorage.getItem("role") === "1";
   const role = isAdmin ? "admin" : "teacher";
-  console.log("isAdmin ",isAdmin);
-
-
+  console.log("isAdmin ", isAdmin);
 
   const [errors, setErrors] = useState({});
 
@@ -51,7 +49,7 @@ const CreateUser = () => {
     setFormData({ ...formData, image: event.target.files[0] });
   };
 
-  const createuser = (event) => {
+  const createuser = async (event) => {
     event.preventDefault();
     const data = new FormData();
     data.append("username", formData.username);
@@ -66,9 +64,11 @@ const CreateUser = () => {
     if (formData.phonenb) {
       data.append("phonenb", formData.phonenb);
     }
+    data.append("class_section_id", formData.class_section_id);
 
+    console.log(data);
     const token = localStorage.getItem("token");
-    axios
+    await axios
       .post("http://localhost:8000/api/users", data, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -79,7 +79,6 @@ const CreateUser = () => {
         },
       })
       .then((response) => {
-        console.log(response.data);
         toast.success("User created successfully!");
         setFormData({
           username: "",
@@ -88,23 +87,18 @@ const CreateUser = () => {
           firstname: "",
           lastname: "",
           role: "",
-          image: null,
+          image: "",
           phonenb: "",
-
+          class_section_id: "",
         });
-        
       })
       .catch((error) => {
         console.error(error);
         toast.error("Failed to create user.");
       });
-   
   };
-  
 
-  useEffect(() => {
-    
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <Box m="20px">
@@ -184,11 +178,7 @@ const CreateUser = () => {
                 onChange={handleInputChange}
                 required
               >
-              
-                {role === "admin" && (
-                <MenuItem value={2}>Teacher</MenuItem>
-                
-                )}
+                {role === "admin" && <MenuItem value={2}>Teacher</MenuItem>}
                 <MenuItem value={3}>Student</MenuItem>
               </Select>
             </FormControl>
@@ -205,7 +195,18 @@ const CreateUser = () => {
               onChange={handleInputChange}
             />
           </div>
-
+          <div style={{ marginBottom: 10 }}>
+            <TextField
+              error={Boolean(errors.username)}
+              helpertext={errors.username}
+              fullWidth
+              name="class_section_id"
+              label="Class Section"
+              type="number"
+              value={formData.class_section_id}
+              onChange={handleInputChange}
+            />
+          </div>
 
           <div style={{ marginBottom: 10 }}>
             <TextField

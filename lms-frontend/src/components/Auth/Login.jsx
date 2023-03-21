@@ -3,7 +3,7 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-
+import imgschool from "./school.jpg";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -40,14 +40,12 @@ export default function Login() {
         email,
         password,
       }),
-    }
-    )
+    })
       .then((res) => res.json())
       .then((data) => {
         if (data.token) {
-
-        toast.success("Logged in", { autoClose: 2000 });
-        console.log(data, "Logged in");
+          toast.success("Logged in", { autoClose: 2000 });
+          console.log(data, "Logged in");
           window.localStorage.setItem("token", data.token);
           window.localStorage.setItem("loggedIn", true);
           window.localStorage.setItem("role", data.role);
@@ -75,7 +73,7 @@ export default function Login() {
           sm={4}
           md={7}
           sx={{
-            backgroundImage: "url(https://source.unsplash.com/random)",
+            backgroundImage: `url(${imgschool})`,
             backgroundRepeat: "no-repeat",
             backgroundColor: (t) =>
               t.palette.mode === "light"

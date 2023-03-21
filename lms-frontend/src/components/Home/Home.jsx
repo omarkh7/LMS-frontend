@@ -124,14 +124,14 @@ const Home = () => {
   console.log("Students", StudentData.length);
   console.log("Classes", ClassesData.length);
   console.log("Sections", SectionData.length);
+  // console.log("USERNAME",alldata.username)
 
   return (
     <Box m="20px">
       {/* HEADER */}
       <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Header title="DASHBOARD" subtitle="Welcome`${}` to your dashboard" />
-
-   
+        <Header title="DASHBOARD" subtitle={`Welcome to your dashboard` }/>
+        {/* ${alldata.username} */}
       </Box>
 
       {/* GRID & CHARTS */}

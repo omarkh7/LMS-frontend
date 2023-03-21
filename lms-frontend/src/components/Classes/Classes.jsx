@@ -52,7 +52,7 @@ const Classes = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log(response.data);
+      console.log("hiii",response.data);
       setAllData(response.data);
       setIsLoading(false);
     } catch (error) {

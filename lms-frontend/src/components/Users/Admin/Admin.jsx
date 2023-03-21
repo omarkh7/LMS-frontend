@@ -12,6 +12,8 @@ import RemoveOutlinedIcon from "@mui/icons-material/RemoveOutlined";
 import { IconButton } from "@mui/material";
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import Loader from "../../Home/Loader/Loader";
+
 import {
   Delete as DeleteIcon,
   Edit as EditIcon,
@@ -24,6 +26,8 @@ const Admins = () => {
   const [selectedInfo, setSelectedInfo] = useState({});
   const [isUpdateMode, setIsUpdateMode] = useState(false);
   const [alldata, setAllData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
   const [imageFile, setImageFile] = useState(null);
   const [newData, setNewData] = useState({
     username: "",
@@ -62,11 +66,13 @@ const Admins = () => {
   
     confirmAlert({
       title: 'Confirm Deletion',
-      message: 'Are you sure you want to delete this Admin?',
+      message: 'Are you sure you want to delete this Teacher?',
       buttons: [
         {
           label: 'Yes',
           onClick: async () => {
+            try {
+              setIsLoading(true);
             await axios.delete(`http://localhost:8000/api/users/${id}`, {
               headers: {
                 Authorization: `Bearer ${token}`,
@@ -74,8 +80,16 @@ const Admins = () => {
             });
             toast.success("Deleted Successfully", 2000);
             fetchallData();
+            setIsLoading(false);
+
+          }
+          catch (error) {
+            console.error(error);
+            toast.error("Delete Failed", 2000);
+            setIsLoading(false);
           }
         },
+      },
         {
           label: 'No',
           onClick: () => {
@@ -370,6 +384,8 @@ const Admins = () => {
   ];
 
   return (
+    <div>{isLoading ?<Loader />:
+
     <Box m="20px">
       {console.log("all data ", alldata)}
       <Header title="Admins" subtitle="List of Admins" />
@@ -417,6 +433,8 @@ const Admins = () => {
         <ToastContainer />
       </Box>
     </Box>
+     }
+     </div>
   );
 };
 
