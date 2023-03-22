@@ -1,5 +1,5 @@
 .notfound{
-    color: #6ad3b1;
+    color: #faaf40;
     line-height: 56px;
     margin-bottom: 1rem;
     text-shadow: 0 0 5px;
@@ -9,7 +9,7 @@
 }
 
 .pagenotfound > p{
-    color: #6ad3b1;
+    color: #faaf40;
 padding-top:50px
 }
 

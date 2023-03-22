@@ -39,7 +39,7 @@ const Students = () => {
     setIsOpen(true);
   };
 
-  const attendanceURL = "http://localhost:8000/api/attendances";
+  const attendanceURL = "https://lms-backend-production-0616.up.railway.app/api/attendances";
 
   const fetchallData = async () => {
     setLoading(true);
@@ -60,7 +60,7 @@ const Students = () => {
 
   const deleteUser = async (student_id) => {
     const token = localStorage.getItem("token");
-    axios.delete(`http://localhost:8000/api/attendances/${student_id}`, {
+    axios.delete(`https://lms-backend-production-0616.up.railway.app/api/attendances/${student_id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

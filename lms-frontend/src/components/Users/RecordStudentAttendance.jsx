@@ -38,7 +38,7 @@ const CreateAttendance = () => {
    
     const token = localStorage.getItem("token");
     axios
-      .post("http://localhost:8000/api/attendances", data, {
+      .post("https://lms-backend-production-0616.up.railway.app/api/attendances", data, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
@@ -68,7 +68,7 @@ const CreateAttendance = () => {
   const fetchUsers = () => {
     const token = localStorage.getItem("token");
     axios
-      .get("http://localhost:8000/api/users", {
+      .get("https://lms-backend-production-0616.up.railway.app/api/users", {
         headers: {
           Authorization: `Bearer ${token}`,
         },

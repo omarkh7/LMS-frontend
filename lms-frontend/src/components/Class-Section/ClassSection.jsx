@@ -41,10 +41,10 @@ const ClassSection = () => {
     setIsOpen(true);
   };
 
-  const apiURLJoin = "http://localhost:8000/api/join";
+  const apiURLJoin = "https://lms-backend-production-0616.up.railway.app/api/join";
 
-  const apiClassesUrl = "http://localhost:8000/api/classes";
-  const apiSectionsUrl = "http://localhost:8000/api/sections";
+  const apiClassesUrl = "https://lms-backend-production-0616.up.railway.app/api/classes";
+  const apiSectionsUrl = "https://lms-backend-production-0616.up.railway.app/api/sections";
 
   useEffect(() => {
     fetchallDataJoin();
@@ -122,7 +122,7 @@ const ClassSection = () => {
       const token = localStorage.getItem("token");
       console.log("batikh data", newData);
       await axios.post(
-        `http://localhost:8000/api/classsections/`,
+        `https://lms-backend-production-0616.up.railway.app/api/classsections/`,
         { class_id: newData.class_id, section_id: newData.section_id },
         {
           headers: {
@@ -158,7 +158,7 @@ const ClassSection = () => {
               setIsLoading(true);
               console.log(id);
               await axios.delete(
-                `http://localhost:8000/api/classsections/${id}`,
+                `https://lms-backend-production-0616.up.railway.app/api/classsections/${id}`,
                 {
                   headers: {
                     Authorization: `Bearer ${token}`,
@@ -201,7 +201,7 @@ const ClassSection = () => {
       setIsLoading(true);
       const token = localStorage.getItem("token");
       const response = await axios.put(
-        `http://localhost:8000/api/classsections/${id}`,
+        `https://lms-backend-production-0616.up.railway.app/api/classsections/${id}`,
         {
           class_id: selectedInfo.class_id,
           section_id: selectedInfo.section_id,

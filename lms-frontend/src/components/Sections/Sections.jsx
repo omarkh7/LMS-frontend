@@ -36,7 +36,7 @@ const Sections = () => {
     setIsOpen(true);
   };
 
-  const apiURL = "http://localhost:8000/api/sections";
+  const apiURL = "https://lms-backend-production-0616.up.railway.app/api/sections";
 
   const fetchallData = async () => {
     try {
@@ -81,7 +81,7 @@ const Sections = () => {
           label: "Yes",
           onClick: async () => {
             try {
-              await axios.delete(`http://localhost:8000/api/sections/${id}`, {
+              await axios.delete(`https://lms-backend-production-0616.up.railway.app/api/sections/${id}`, {
                 headers: {
                   Authorization: `Bearer ${token}`,
                 },

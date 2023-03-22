@@ -72,7 +72,7 @@ const Students = () => {
     setIsOpen(true);
   };
 
-  const apiURL = "http://localhost:8000/api/users";
+  const apiURL = "https://lms-backend-production-0616.up.railway.app/api/users";
 
   const fetchallData = async () => {
     try {
@@ -106,7 +106,7 @@ const Students = () => {
             try {
               setIsLoading(true);
 
-              await axios.delete(`http://localhost:8000/api/users/${id}`, {
+              await axios.delete(`https://lms-backend-production-0616.up.railway.app/api/users/${id}`, {
                 headers: {
                   Authorization: `Bearer ${token}`,
                 },
@@ -220,7 +220,7 @@ const Students = () => {
           </Box>
         ) : params.row.image ? (
           <img
-            src={`http://localhost:8000/images/${params.row.image}`}
+            src={`https://lms-backend-production-0616.up.railway.app/images/${params.row.image}`}
             alt={params.row.image}
             width={50}
             height={50}

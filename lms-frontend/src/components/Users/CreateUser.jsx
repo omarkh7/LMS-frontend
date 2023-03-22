@@ -69,7 +69,7 @@ const CreateUser = () => {
     console.log(data);
     const token = localStorage.getItem("token");
     await axios
-      .post("http://localhost:8000/api/users", data, {
+      .post("https://lms-backend-production-0616.up.railway.app/api/users", data, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",

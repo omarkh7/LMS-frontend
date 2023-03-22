@@ -30,9 +30,9 @@ const Home = () => {
 
 
 
-  const apiUserURL = "http://localhost:8000/api/users";
-  const apiClassesURL = "http://localhost:8000/api/classes";
-  const apiSectionsURL = "http://localhost:8000/api/sections";
+  const apiUserURL = "https://lms-backend-production-0616.up.railway.app/api/users";
+  const apiClassesURL = "https://lms-backend-production-0616.up.railway.app/api/classes";
+  const apiSectionsURL = "https://lms-backend-production-0616.up.railway.app/api/sections";
 
   //USERS
   const fetchallUserData = async () => {
@@ -332,7 +332,7 @@ const Home = () => {
             fontWeight="600"
             sx={{ padding: "30px 30px 0 30px" }}
           >
-            Attendance{" "}
+            Parent Satisfaction{" "}
           </Typography>
           <Box height="400px" mt="-20px">
             <BarChart isDashboard={true} />
