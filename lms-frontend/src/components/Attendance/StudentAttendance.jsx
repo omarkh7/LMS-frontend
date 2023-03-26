@@ -2,23 +2,10 @@ import { Box, TextField, Button, Stack, Input } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import Header from "../Header";
-// import InputBase from "@mui/material/InputBase";
-import imgs from "../user.png";
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
-import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
 import "react-toastify/dist/ReactToastify.css";
-import RemoveOutlinedIcon from "@mui/icons-material/RemoveOutlined";
-import { IconButton } from "@mui/material";
-// import SearchIcon from "@mui/icons-material/Search";
-import { CircularProgress } from "@mui/material";
-import {
-  Delete as DeleteIcon,
-  Edit as EditIcon,
-  Save as SaveIcon,
-} from "@mui/icons-material";
-
 import { useTheme } from "@mui/material";
 
 const Students = () => {
@@ -58,56 +45,6 @@ const Students = () => {
     setLoading(false);
   };
 
-  const deleteUser = async (student_id) => {
-    const token = localStorage.getItem("token");
-    axios.delete(`http://localhost:8000/api/attendances/${student_id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    toast.success("Deleted Successfully", 2000);
-    fetchallData();
-  };
-
-  const handleUpdate = async (student_id, field, value) => {
-    const updatedData = alldata.map((row) => {
-      if (row.student_id === student_id) {
-        console.log("row ", row);
-        return { ...row, [field]: value };
-      }
-      return row;
-    });
-
-    console.log("updated data ", updatedData);
-    
-    try {
-      const token = localStorage.getItem("token");
-      const response = await axios.put(
-        `${attendanceURL}/${student_id}`,
-        {
-          student_id: selectedInfo.student_id,
-          teacher_id: selectedInfo.teacher_id,
-          class_section_id: selectedInfo.class_section_id,
-          status: selectedInfo.status,
-          date: selectedInfo.date,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      console.log("Updated Successfully ", response);
-      setAllData(response.data);
-      setIsUpdateMode(false);
-      setSelectedInfo({});
-      toast.success("Updated Successfully", 2000);
-    } catch (error) {
-      console.error(error);
-      toast.error("Update Failed", 2000);
-    }
-  };
   useEffect(() => {
     fetchallData();
   }, []);
